@@ -1,0 +1,142 @@
+<?php
+// module/Photo/view/photo/photo/add.phtml:
+
+$title = $this->translate('add')." ".$this->translate('imagepagetitle');
+$this->headTitle($title);
+?>
+
+<section class="content-header">
+    <h1>
+        <?php echo $this->escapeHtml($title); ?>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="<?php echo $this->url('home') ?>"><i class="fa fa-dashboard"></i><?php echo $this->translate('dashbord');?></a></li>
+        <li><a href="<?php echo $this->url('Photo') ?>"><?php echo $this->translate('imagepagetitle');?></a></li>
+        <li class="active"><?php echo $this->escapeHtml($title); ?></li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- general form elements disabled -->
+            <div class="box box-primary">
+
+                <div class="box-body">
+
+                    <?php
+                    $form->setAttribute('action', $this->url('Photo', array('action' => 'add')));
+                    $form->setAttribute('data-toggle' , 'validator');
+                    $form->setAttribute('role', 'form');
+                    $form->prepare();
+
+                    echo $this->form()->openTag($form);
+                    echo $this->formHidden($form->get('id'));
+                    echo $this->formHidden($form->get('country'));
+                    echo $this->formHidden($form->get('user'));
+                    ?>
+                    <div class="form-group">
+                        <label for='title'><?php echo $this->translate('titleform');?></label>
+                        <?php
+                        echo $this->formRow($form->get('title'));
+                        ?>
+                        <span class="help-block with-errors"> <?php echo $this->translate('englishTitleVal');?> ?;,{}()[\]\-_+=!@#$%\^&*| </span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for='subtitle'><?php echo $this->translate('subtitleform');?></label>
+                        <?php
+                        echo $this->formRow($form->get('subtitle'));
+                        ?>
+                        <span class="help-block with-errors"> <?php echo $this->translate('englishTitleVal');?> ?;,{}()[\]\-_+=!@#$%\^&*| </span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for='artitle'><?php echo $this->translate('titleform');?> <?php echo $this->translate('arabic');?></label>
+                        <?php
+                        echo $this->formRow($form->get('artitle'));
+                        ?>
+                        <span class="help-block with-errors"> <?php echo $this->translate('arabicTitleVal');?> ?;,{}()[\]\-_+=!@#$%\^&*|</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for='subartitle'><?php echo $this->translate('subtitleform');?> <?php echo $this->translate('arabic');?></label>
+                        <?php
+                        echo $this->formRow($form->get('subartitle'));
+                        ?>
+                        <span class="help-block with-errors"> <?php echo $this->translate('arabicTitleVal');?> ?;,{}()[\]\-_+=!@#$%\^&*|</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for='photo'><?php echo $this->translate('imageform');?></label>
+                        <?php
+                        echo $this->formRow($form->get('photo'));
+                        ?>
+                        <a rel='<?php echo $this->url('Myuploads') ?>' for="photo" class='btn btn-xs mida' data-toggle='modal' title='Users Roles'><i class='fa fa-picture-o'></i></a>
+                    </div>
+
+                    <div class="form-group">
+                        <label for='content'><?php echo $this->translate('contentform');?></label>
+                        <?php
+                        echo $this->formRow($form->get('content'));
+                        ?>
+                        <span class="help-block with-errors" id="content_feedback"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for='arcontent'><?php echo $this->translate('arabic');?> <?php echo $this->translate('contentform');?></label>
+                        <?php
+                        echo $this->formRow($form->get('arcontent'));
+                        ?>
+                        <span class="help-block with-errors" id="arcontent_feedback"></span>
+                    </div>
+                    
+                    <div class="box-footer">
+                        <?php
+                        echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+                        echo $this->form()->closeTag();
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <input type="hidden" name="parentName" id="parentName" value=""/> 
+    <div class="modal fade" id="MediaLibraryModal" tabindex="-1" role="dialog" aria-labelledby="MediaLibraryModalLabel" aria-hidden="true">
+                   
+    </div>
+
+</section>
+<?php $this->inlineScript()->captureStart() ?>
+                
+    $(document).ready(function(){
+        $('.mida').on('click', function () {
+            var url = $(this).attr('rel');
+            var parent = $(this).attr('for');
+            $('#MediaLibraryModal').load(url);
+            $('#MediaLibraryModal').modal('show');
+            $("#parentName").val(parent);
+        });
+        
+         var content_max = 1500;
+        $('#content_feedback').html('<?php echo $this->translate('upTo');?> ,' + content_max + ' <?php echo $this->translate('remaining');?>');
+
+        $('#content').keyup(function() {
+            var text_length = $('#content').val().length;
+            var text_remaining = content_max - text_length;
+            $('#content_feedback').html('<?php echo $this->translate('upTo');?> ,'+ text_remaining + ' <?php echo $this->translate('remaining');?>');
+        });
+        
+        var arcontent_max = 1500;
+        $('#arcontent_feedback').html('<?php echo $this->translate('upTo');?> ,' + arcontent_max + ' <?php echo $this->translate('remaining');?>');
+
+        $('#arcontent').keyup(function() {
+            var text_length = $('#arcontent').val().length;
+            var text_remaining = arcontent_max - text_length;
+            $('#arcontent_feedback').html('<?php echo $this->translate('upTo');?> ,'+ text_remaining + ' <?php echo $this->translate('remaining');?>');
+        });
+    });
+<?php $this->inlineScript()->captureEnd() ?>
+
