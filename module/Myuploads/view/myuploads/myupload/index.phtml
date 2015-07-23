@@ -156,12 +156,13 @@
     });
 
     function selecteOneFile(selected) {
-        var el = selected.parentNode.parentNode;
-        selectedFile = selected.src;
+        //var el = selected.parentNode.parentNode;
+        selectedFile = selected.childNodes[1].childNodes[0].src;
+        //alert( );
         $('#selecteLable').html(selectedFile);
         $('.thumbnail').removeClass('selected');
-        if (el) {
-            el.className += el.className ? ' selected' : 'selected';
+        if (selected) {
+            selected.className += selected.className ? ' selected' : 'selected';
         }
     }
 
@@ -171,12 +172,14 @@
         bootbox.confirm("Pleas Note That The File Will Not Be Any More Avalable , Are you sure?",
                 function (result) {
                     if (result) {
-                        $.post(
-                                "<?php echo $this->url('Myuploads', array('action' => 'fileDelete')); ?>",
+                        $.post("<?php echo $this->url('Myuploads', array('action' => 'fileDelete')); ?>",
                                 {file: file},
                         function (data) {
                             if (data.done == 'true') {
-                                call2();
+                                $("#tab_1").empty();
+		                end = false;
+		                page = 1;
+		                call2();
                             } else {
                                 $('#error').html('<h4>Error In Submit!</h4><p>' + data.message + '</p>');
                                 $('#error').show(150);
@@ -285,7 +288,12 @@
                 success: function (response, statusText, xhr, $form) {
                     clearInterval(progressInterval);
                     showProgress(100, 'Complete!');
-
+                    
+                    $("#tab_1").empty();
+		    end = false;
+		    page = 1;
+		    call2();
+		                
                     // TODO: You'll need to do some custom logic here to handle a successful
                     // form post, and when the form is invalid with validation errors.
                     if (response.status) {
@@ -296,7 +304,7 @@
                         // http://stackoverflow.com/a/1043969
                         var fileInput = $('#file');
                         fileInput.replaceWith(fileInput.val('').clone(true));
-
+                        
                         // TODO: Do something with these errors
                         // showErrors(response.formErrors);
                         if (response.formErrors) {
