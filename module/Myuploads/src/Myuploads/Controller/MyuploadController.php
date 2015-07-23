@@ -147,10 +147,10 @@ class MyuploadController extends AbstractActionController {
             if ($file_ext == "jpg" OR $file_ext == "png" OR $file_ext == "gif") {
             $filesview[] = ""
                     . "<div class='col-xs-6 col-sm-4 col-md-3 pull-right content'>"
-                    . "<div class='thumbnail'>"
+                    . "<div onclick='selecteOneFile(this)'  class='thumbnail'>"
                     . "<div class='deletefile' onclick='deleteFile(\"$file\")'><i class='fa fa-trash-o'></i></div>"
                     . "<div class='centered'>"
-                    . "<img class='' onclick='selecteOneFile(this)' src='$file'>"
+                    . "<img class='' src='$file'>"
                     . "</div>"
                     . "</div>"
                     . "</div>";
@@ -159,10 +159,10 @@ class MyuploadController extends AbstractActionController {
             if ($file_ext == "mp4") {
             $filesview[] = ""
                     . "<div class='col-xs-6 col-sm-4 col-md-3 pull-right content'>"
-                    . "<div class='thumbnail'>"
+                    . "<div onclick='selecteOneFile(this)'  class='thumbnail'>"
                     . "<div class='deletefile' onclick='deleteFile(\"$file\")'><i class='fa fa-trash-o'></i></div>"
                     . "<div class='centered'>"
-                    . "<video onclick='selecteOneFile(this)'  src='$file' controls></video>"
+                    . "<video src='$file' controls></video>"
                     . "</div>"
                     . "</div>"
                     . "</div>";
@@ -171,9 +171,10 @@ class MyuploadController extends AbstractActionController {
             if ($file_ext == "mp3") {
             $filesview[] = ""
                     . "<div class='col-xs-6 col-sm-4 col-md-3 pull-right content'>"
-                    . "<div class='thumbnail'>"
+                    . "<div onclick='selecteOneFile(this)' class='thumbnail'>"
+                    . "<div class='deletefile' onclick='deleteFile(\"$file\")'><i class='fa fa-trash-o'></i></div>"
                     . "<div class='centered'>"
-                    . "<audio onclick='selecteOneFile(this)'  src='$file' controls></audio>"
+                    . "<audio src='$file' controls></audio>"
                     . "</div>"
                     . "</div>"
                     . "</div>"

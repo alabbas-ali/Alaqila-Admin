@@ -196,10 +196,6 @@ class AdvertisementController extends AbstractActionController {
     public function deleteAction() {
         $id = (int) $this->params()->fromRoute('id', 0);
         
-        if ($id==1) {
-            return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Delete This'));
-        }
-        
         if (!$id) {
             return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Delete This'));
         }
