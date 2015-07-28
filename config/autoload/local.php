@@ -32,4 +32,11 @@ return array(
             )
         )
     ),
+    'locale' => array(
+        'default' => 'ar_SY',
+        'available'     => array(
+            'en_US' => 'English',
+            'ar_SY' => 'Arabic',
+        ),
+    ),
  );
