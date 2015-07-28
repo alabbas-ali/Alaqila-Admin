@@ -14,8 +14,24 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
+    public function changeLocaleAction() {
+        // New Container will get he Language Session if the SessionManager already knows the language session.
+        $session = new Container('language');
+        $language = $request->getPost()->language;
+        $config = $this->serviceLocator->get('config');
+        if (isset($config['locale']['available'][$language])) {
+            $session->language = $language;
+            $this->serviceLocator->get('translator')->setLocale($session->language);
+        }
+        return new ViewModel();
+    }
     public function indexAction()
     {
         return new ViewModel();
+    }
+    
+    public function getlangusgesAction() {
+        $config = $this->serviceLocator->get('config');
+        return new JsonModel($config['locale']['available']);
     }
 }

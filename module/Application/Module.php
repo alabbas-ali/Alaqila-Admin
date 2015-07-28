@@ -12,6 +12,7 @@ namespace Application;
 
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
+use Zend\Session\Container;
 
 class Module {
 
@@ -64,6 +65,11 @@ class Module {
       } */
 
     public function onBootstrap(MvcEvent $e) {
+        
+        // Just a call to the translator, nothing special!
+        $this->initTranslator($e);
+        
+        
         $app = $e->getApplication();
         $em = $app->getEventManager();
         $sm = $app->getServiceManager();
@@ -104,7 +110,18 @@ class Module {
             return $response;
         }, -100);
     }
+    
+    protected function initTranslator(MvcEvent $event){
+        $serviceManager = $event->getApplication()->getServiceManager();
 
+        // Zend\Session\Container
+        $session = New Container('language');
+
+        $translator = $serviceManager->get('translator');
+        $translator->setLocale($session->language)
+            ->setFallbackLocale('ar_SY');
+    }
+    
     public function getConfig() {
         return include __DIR__ . '/config/module.config.php';
     }
