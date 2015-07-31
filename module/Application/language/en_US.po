@@ -69,198 +69,198 @@ msgid "Exception"
 msgstr ""
 
 msgid "dashbord"
-msgstr "الرئيسية "
+msgstr "Dashbord "
 
 msgid "yesorno"
-msgstr "هل انت متأكد؟"
+msgstr "Are You Sure ?"
 
 msgid "add"
-msgstr "إضافة"
+msgstr "Add"
 
 msgid "edit"
-msgstr "تعديل"
+msgstr "Edit"
 
 msgid "tableid"
-msgstr "رقم"
+msgstr "ID"
 
 msgid "tabletitle"
-msgstr "عنوان"
+msgstr "Title"
 
 msgid "tablecontent"
-msgstr "المحتوى"
+msgstr "Content"
 
 msgid "tablecountry"
-msgstr "الدولة"
+msgstr "Country"
 
 msgid "tabledate"
-msgstr "تاريخ"
+msgstr "Date"
 
 msgid "tablevisits"
-msgstr "الزوار"
+msgstr "Visits"
 
 msgid "tableuser"
-msgstr "المستخدم"
+msgstr "Users"
 
 msgid "tablestatus"
-msgstr "الحالة"
+msgstr "Status"
 
 msgid "tableusername"
-msgstr "اسم المستخدم"
+msgstr "User Name"
 
 msgid "tableemail"
-msgstr "البريد الإلكتروني"
+msgstr "Email"
 
 msgid "tabledisplayname"
-msgstr "اسم الظهور "
+msgstr "Display Name"
 
 msgid "tabletype"
-msgstr "النمط "
+msgstr "Type "
 
 msgid "tableisadmin"
-msgstr "مسؤول "
+msgstr "Admin "
 
 msgid "tableip"
-msgstr "عنوان ايبي "
+msgstr "IP"
 
 msgid "tableoptions"
-msgstr "خيارات"
+msgstr "Options"
 
 msgid "arabic"
-msgstr "عربي"
+msgstr "Arabic"
 
 msgid "english"
-msgstr "انكليزي"
+msgstr "English"
 
 msgid "name"
-msgstr "اسم"
+msgstr "Name"
 
 msgid "titleform"
-msgstr "عنوان"
+msgstr "From"
 
 msgid "subtitleform"
-msgstr "عنوان ثانوي"
+msgstr "Subtitle"
 
 msgid "advertisementpagetitle"
-msgstr "الإعلانات التجارية"
+msgstr "Advertisment"
 
 msgid "imageform"
-msgstr "صورة"
+msgstr "Image"
 
 msgid "urlform"
-msgstr "رابط"
+msgstr "Link"
 
 msgid "countryform"
-msgstr "الدولة"
+msgstr "Country"
 
 msgid "contentform"
-msgstr "محتوى"
+msgstr "Content"
 
 msgid "usernameform"
-msgstr "اسم المستخدم"
+msgstr "User Name"
 
 msgid "emailform"
-msgstr "البريد الإلكتروني"
+msgstr "Email"
 
 msgid "displaynameform"
-msgstr "اسم الظهور "
+msgstr "Display Name"
 
 msgid "typeform"
-msgstr "النمط "
+msgstr "Type "
 
 msgid "typeidform"
-msgstr "رقم النمط "
+msgstr "Type ID"
 
 msgid "isadminform"
-msgstr "مسؤول "
+msgstr "Admin "
 
 msgid "ipform"
-msgstr "عنوان ايبي "
+msgstr "IP "
 
 msgid "pageform"
-msgstr "الصفحة "
+msgstr "Page "
 
 msgid "passwordform"
-msgstr "كلمة المرور "
+msgstr "Password "
 
 msgid "passwordconfirmform"
-msgstr "تأكيد كلمة المرور  "
+msgstr "Confirm Password"
 
 #: الإعدادات
 msgid "settings"
-msgstr "الإعدادات "
+msgstr "Settings "
 
 msgid "frequencyform"
-msgstr "التردد "
+msgstr "Frequency "
 
 msgid "newnumberform"
-msgstr "عدد الأخبار "
+msgstr "News Number"
 
 msgid "uploadfolder"
-msgstr "مجلد الرفع  "
+msgstr "Uplude Folder"
 
 #: الصفحات
 msgid "audiopagetitle"
-msgstr " صوتيات"
+msgstr " Audio "
 
 msgid "videopagetitle"
-msgstr " فيديوهات"
+msgstr " Video "
 
 msgid "newspagetitle"
-msgstr " اخبار"
+msgstr " News"
 
 msgid "imagepagetitle"
-msgstr " صور"
+msgstr " Images "
 
 msgid "pagespagetitle"
-msgstr " صفحات"
+msgstr " Pages "
 
 msgid "countrypagetitle"
-msgstr " دول"
+msgstr " Countries "
 
 msgid "commentspagetitle"
-msgstr " تعليقات"
+msgstr " Comments "
 
 msgid "userspagetitle"
-msgstr " المستخدمين"
+msgstr " Users "
 
 msgid "visitpagetitle"
-msgstr " الزوار"
+msgstr " visitors "
 
 msgid "uploadpagetitle"
-msgstr " مركز الرفع"
+msgstr "Uplude Center"
 
 msgid "settingspagetitle"
-msgstr " الإعدادات"
+msgstr " Settings "
 
 msgid "programspagetitle"
-msgstr " جدول البث"
+msgstr " Prodcast Table "
 
 msgid "tomorrowpagetitle"
-msgstr " جدول اليوم"
+msgstr " Tomorrow Program "
 
 msgid "todaypagetitle"
-msgstr " جدول غدا"
+msgstr " Today Program "
 
 msgid "programdayform"
-msgstr " ينتمي الى"
+msgstr "Program Day"
 
 msgid "startdateform"
-msgstr " وقت بدأ البرنامج"
+msgstr " Program Start From"
 
 msgid "enddateto"
-msgstr "وقت إنتهاء البرنامج"
+msgstr "Program End In "
 
 msgid "durationform"
-msgstr "مدة البرنامج"
+msgstr "Duration"
 
 msgid "englishTitleVal"
-msgstr "مسموح حتى 60 حرف انكليزي , ارقام ومالمحارف "
+msgstr "Allowed up to 60 English letters, numbers and characters"
 
 msgid "arabicTitleVal"
-msgstr "مسموح حتى 60 حرف عربي , ارقام ومالمحارف "
+msgstr "Allowed up to 60 Arabic letters, numbers and characters"
 
 msgid "upTo"
-msgstr "مسموح حتى 1500 حرف "
+msgstr "Allowed up to 1500 characters"
 
 msgid "remaining"
-msgstr "المحارف المتبقية "
+msgstr "remaining  "
