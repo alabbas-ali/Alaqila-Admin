@@ -20,8 +20,8 @@
                             <div class="box">
                                 <div class="box-header">
                                     <div id="error" style="display: none" class="callout callout-danger">
-                                        
                                     </div>
+                                    
                                     <!--<p>
                                         <a href="<?php echo $this->url('Comment', array('action'=>'add'));?>">Add new Comment</a>
                                     </p>-->
@@ -35,6 +35,7 @@
                                                 <th><?php echo $this->translate('tablecontent');?></th>
                                                 <th><?php echo $this->translate('tableuser');?></th>
                                                 <th><?php echo $this->translate('tabledate');?></th>
+                                                <th>auther</th>
                                                 <th><?php echo $this->translate('tablestatus');?></th>
                                                 <th><?php echo $this->translate('tableoptions');?></th>
                                             </tr>
@@ -53,65 +54,96 @@
     $(document).ready(function(){
         function fulldata(){
             $('#commentDataTable').dataTable({
-            "destroy": true,
-            "lengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
-            "searching": true,
-            "ordering": true,
-            "order": [[ 0, "desc" ]],
-            "processing": true,
-            "ajax" : "<?php echo $this->url('Comment', array('action'=>'getAll'));?>",
-            "columnDefs" : [{
-                            "targets": 0,
-                            "data": "id",
-                            "render": function ( data, type, full, meta ) {
-					return data;
-                                    }
-				},{
-			    "targets": 1,
-                            "data": "title",
-                            "render": function ( data, type, full, meta ) {
-					return data;
-                                    }
-				},{
-			    "targets": 2,
-                            "data": "content",
-                            "render": function ( data, type, full, meta ) {
-					return data;
-                                    }
-				},{
-			    "targets": 3,
-                            "data": "username",
-                            "render": function ( data, type, full, meta ) {
-					return data;
-                                    }
-				},{
-                            "targets": 4,
-                            "data": "comment_date",
-                            "render": function ( data, type, full, meta ) {
-					return data;
-                                    }
-				},{
-                            "targets": 5,
-                            "data": "active",
-                            "render": function ( data, type, full, meta ) {
-                                        var activeicon='fa fa-close';
-                                        var activemsg='Activate';
-                                        if(data){
-                                            activeicon='fa fa-check';
-                                            activemsg='Deactivate';
+                "destroy": true,
+                "lengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
+                "searching": true,
+                "ordering": true,
+                "order": [[ 0, "desc" ]],
+                "processing": true,
+                "ajax" : "<?php echo $this->url('Comment', array('action'=>'getAll'));?>",
+                "columnDefs" : [{
+                                "targets": 0,
+                                "data": "id",
+                                "render": function ( data, type, full, meta ) {
+                                            return data;
                                         }
-                                        return "<a rel='" + full.id + "' class='btn btn-xs chstatus' data-toggle='tooltip' data-placement='top' title='"+ activemsg +"'><i class='"+ activeicon +"'></i></a>";
-                                    }
-				},{
-                            "targets": 6,
-                            "data": "id",
-                            "render": function ( data, type, full, meta ) {
-                                return "<a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>";
+                                    },{
+                                "targets": 1,
+                                "data": "title",
+                                "render": function ( data, type, full, meta ) {
+                                            return data;
+                                        }
+                                    },{
+                                "targets": 2,
+                                "data": "content",
+                                "render": function ( data, type, full, meta ) {
+                                            return data;
+                                        }
+                                    },{
+                                "targets": 3,
+                                "data": "username",
+                                "render": function ( data, type, full, meta ) {
+                                            return data;
+                                        }
+                                    },{
+                                "targets": 4,
+                                "data": "comment_date",
+                                "render": function ( data, type, full, meta ) {
+                                            return data;
+                                        }
+                                    },{
+                                "targets": 5,
+                                "data": "userid",
+                                "visible": false,
+                                "render": function ( data, type, full, meta ) {
+                                            return data;
+                                        }
+                                    },{
+                                "targets": 6,
+                                "data": "active",
+                                "render": function ( data, type, full, meta ) {
+                                            var activeicon='fa fa-close';
+                                            var activemsg='Activate';
+                                            if(data){
+                                                activeicon='fa fa-check';
+                                                activemsg='Deactivate';
+                                            }
+                                            return "<a rel='" + full.id + "' class='btn btn-xs chstatus' data-toggle='tooltip' data-placement='top' title='"+ activemsg +"'><i class='"+ activeicon +"'></i></a>";
+                                        }
+                                    },{
+                                "targets": 7,
+                                "data": "id",
+                                "render": function ( data, type, full, meta ) {
+                                    return "<a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>\n\
+                                    <a href='<?php echo $this->url('Comment', array('action'=>'edit'));?>"+ data +"' class='btn btn-xs' data-toggle='tooltip' data-placement='top' title='Edit'><i class='fa fa-edit'></i></a>";
                                 }
-                        }]
+                }]
+                ,initComplete: function () {
+                    var authorColumn=this.api().columns(3);
+                    $('#auther').on( 'change', function () {
+                        authorColumn
+                            .columns( 5 )
+                            .search( this.value )
+                            .draw();
+                    });
+                }
             });
         };
-        
+        <?php
+        $adminUser= $this->zfcUserIdentity()->getIsAdmin();
+        if($adminUser){
+        ?>
+            $.getJSON("<?php echo $this->url('Users', array('action' => 'getAll')) ?>", function(result){
+            $("<span>User: </span>").appendTo('.box-header' );
+            var select = $("<select id='auther'><option value=''></option></select>").appendTo('.box-header' );
+                $.each(result.data, function(index, element) {
+                select.append( '<option value="'+element.id+'">'+element.displayName+'</option>' )    
+                });
+            });
+        <?php
+        }
+        ?>
+         
         fulldata();
          
         $('#commentDataTable tbody').on('click', '.delete', function () {
@@ -151,6 +183,3 @@
      });
 
      <?php $this->inlineScript()->captureEnd() ?>
-
-
- 
