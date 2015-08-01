@@ -315,10 +315,10 @@ msgid "programspagetitle"
 msgstr " جدول البث"
 
 msgid "tomorrowpagetitle"
-msgstr " جدول اليوم"
+msgstr "جدول غدا "
 
 msgid "todaypagetitle"
-msgstr " جدول غدا"
+msgstr "جدول اليوم"
 
 msgid "programdayform"
 msgstr " ينتمي الى"
