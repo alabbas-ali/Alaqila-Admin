@@ -29,8 +29,7 @@ class IndexController extends AbstractActionController
         $view->setTemplate('application/index/index.phtml'); // path to phtml file under view folder
         return $view;
     }
-    public function indexAction()
-    {
+    public function indexAction() {
         return new ViewModel();
     }
     
