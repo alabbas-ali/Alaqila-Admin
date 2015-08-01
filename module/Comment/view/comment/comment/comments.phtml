@@ -107,7 +107,8 @@
                             "targets": 6,
                             "data": "id",
                             "render": function ( data, type, full, meta ) {
-                                return "<a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>";
+                                return "<a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>\n\
+                                <a href='<?php echo $this->url('Comment', array('action'=>'edit'));?>"+ data +"' class='btn btn-xs' data-toggle='tooltip' data-placement='top' title='Edit'><i class='fa fa-edit'></i></a>";
                                 }
                         }]
             });

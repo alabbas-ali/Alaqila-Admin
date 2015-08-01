@@ -48,14 +48,34 @@ class CommentController extends AbstractActionController {
                 ;
 
             $query = $qb->getQuery();
-            $data=$qb->getQuery()->getResult();
+            $olddata=$qb->getQuery()->getResult();
+            $data=array();
+            foreach($olddata as $row){
+                $row['userid']=$user->id;
+                $data[]=$row;
+            }
         } else {
             $comments = $this->getEntityManager()->getRepository('Comment\Model\Comment')->findAll();
             $data = array();
             //$i=0;
+            $typeTableArr=array('news'=>'News\Model\News','video'=>'Video\Model\Video',
+                'audio'=>'Audio\Model\Audio','photo'=>'Photo\Model\Photo');
             foreach ($comments as $comment) {
-                $data[] = $comment->getArrayCopy();
+                $item= $comment->getArrayCopy();
+                
+                if(isset($typeTableArr[$item['type']])){
+                    $typerec = $this->getEntityManager()->find($typeTableArr[$item['type']], $item['type_id']);
+                    if($typerec){
+                        $typeData=$typerec->getArrayCopy();
+                        $item['userid']=$typerec->user->id;
+                    }
+                }
+                if(!isset($item['userid'])){
+                    $item['userid']=$user->id;
+                }
+                $data[] =$item;
             }
+            
         }
         
         return new JsonModel(array("data" => $data));
