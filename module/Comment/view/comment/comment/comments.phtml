@@ -69,30 +69,18 @@
                                     }
 				},{
 			    "targets": 1,
-                            "data": "title",
-                            "render": function ( data, type, full, meta ) {
-					return data;
-                                    }
-				},{
-			    "targets": 2,
-                            "data": "content",
-                            "render": function ( data, type, full, meta ) {
-					return data;
-                                    }
-				},{
-			    "targets": 3,
                             "data": "username",
                             "render": function ( data, type, full, meta ) {
 					return data;
                                     }
 				},{
-                            "targets": 4,
+                            "targets": 2,
                             "data": "comment_date",
                             "render": function ( data, type, full, meta ) {
 					return data;
                                     }
 				},{
-                            "targets": 5,
+                            "targets": 3,
                             "data": "active",
                             "render": function ( data, type, full, meta ) {
                                         var activeicon='fa fa-close';
@@ -104,7 +92,7 @@
                                         return "<a rel='" + full.id + "' class='btn btn-xs chstatus' data-toggle='tooltip' data-placement='top' title='"+ activemsg +"'><i class='"+ activeicon +"'></i></a>";
                                     }
 				},{
-                            "targets": 6,
+                            "targets": 4,
                             "data": "id",
                             "render": function ( data, type, full, meta ) {
                                 return "<a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>\n\

@@ -76,6 +76,7 @@ $this->headTitle($title);
                     </div>
 
                     <div class="form-group">
+                        <a rel='<?php echo $this->url('Myuploads') ?>' for="content" class='btn btn-xs mida' data-toggle='modal' title=''><i class='fa fa-picture-o'></i></a>
                         <label for='content'><?php echo $this->translate('contentform');?></label>
                         <?php
                         echo $this->formRow($form->get('content'));
@@ -84,6 +85,7 @@ $this->headTitle($title);
                     </div>
 
                     <div class="form-group">
+                        <a rel='<?php echo $this->url('Myuploads') ?>' for="arcontent" class='btn btn-xs mida' data-toggle='modal' title=''><i class='fa fa-picture-o'></i></a>
                         <label for='arcontent'><?php echo $this->translate('arabic');?> <?php echo $this->translate('contentform');?></label>
                         <?php
                         echo $this->formRow($form->get('arcontent'));
