@@ -367,10 +367,10 @@ class User implements UserInterface,InputFilterAwareInterface {
         $this->instagram =  (isset($data['instagram'])) ? $data['instagram'] : null;
         $this->twitter =  (isset($data['twitter'])) ? $data['twitter'] : null;
         $this->livestream =  (isset($data['livestream'])) ? $data['livestream'] : null;
-        $this->content = (isset($data['content'])) ? $data['content'] : null;
-        $this->arcontent = (isset($data['arcontent'])) ? $data['arcontent'] : null;
-        $this->subartitle = (isset($data['subartitle'])) ? $data['subartitle'] : null;
-        $this->subtitle = (isset($data['subtitle'])) ? $data['subtitle'] : null;
+        $this->content = (isset($data['content'])) ? $data['content'] : '';
+        $this->arcontent = (isset($data['arcontent'])) ? $data['arcontent'] : '';
+        $this->subartitle = (isset($data['subartitle'])) ? $data['subartitle'] : '';
+        $this->subtitle = (isset($data['subtitle'])) ? $data['subtitle'] : '';
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter) {
