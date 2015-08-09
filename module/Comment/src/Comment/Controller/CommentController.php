@@ -146,7 +146,7 @@ class CommentController extends AbstractActionController {
             ));
         }
 
-        $form = new CommentForm($this->getEntityManager());
+        $form = new CommentForm();
         $form->bind($comment);
         $form->get('submit')->setAttribute('value', 'Edit');
 
@@ -154,7 +154,6 @@ class CommentController extends AbstractActionController {
         if ($request->isPost()) {
             $form->setInputFilter($comment->getInputFilter());
             $form->setData($request->getPost());
-
             if ($form->isValid()) {
                 $this->getEntityManager()->flush();
 

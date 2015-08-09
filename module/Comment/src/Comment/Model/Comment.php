@@ -35,10 +35,6 @@ class Comment implements InputFilterAwareInterface {
      */
     protected $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected $title;
 
     /**
      * @ORM\Column(type="string")
@@ -86,7 +82,6 @@ class Comment implements InputFilterAwareInterface {
 
     public function exchangeArray($data) {
         $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->title = (isset($data['title'])) ? $data['title'] : null;
         $this->content = (isset($data['content'])) ? $data['content'] : null;
         $this->username = (isset($data['username'])) ? $data['username'] : null;
         $this->type = (isset($data['type'])) ? $data['type'] : null;
@@ -126,24 +121,6 @@ class Comment implements InputFilterAwareInterface {
                 ),
             ));
 
-            $inputFilter->add(array(
-                'name' => 'title',
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min' => 1,
-                            'max' => 100,
-                        ),
-                    ),
-                ),
-            ));
 
             $inputFilter->add(array(
                 'name' => 'content',
@@ -158,7 +135,7 @@ class Comment implements InputFilterAwareInterface {
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 100,
+                            'max' => 255,
                         ),
                     ),
                 ),
@@ -183,43 +160,7 @@ class Comment implements InputFilterAwareInterface {
                 ),
             ));
             
-            $inputFilter->add(array(
-                'name' => 'type',
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min' => 1,
-                            'max' => 100,
-                        ),
-                    ),
-                ),
-            ));
-            
-            $inputFilter->add(array(
-                'name' => 'type_id',
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min' => 1,
-                            'max' => 100,
-                        ),
-                    ),
-                ),
-            ));
+
             
             $this->inputFilter = $inputFilter;
         }

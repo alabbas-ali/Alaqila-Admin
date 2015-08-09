@@ -15,23 +15,19 @@
 namespace Comment\Form;
 
 use Zend\Form\Form;
-use Doctrine\ORM\EntityManager;
+
 
 class CommentForm extends Form {
 
-    protected $entityManager;
 
-    public function __construct(EntityManager $entityManager) {
+
+    public function __construct() {
         parent::__construct('Comment');
-
-        $this->entityManager = $entityManager;
 
         // we want to ignore the name passed
 
         $this->setAttribute('method', 'post');
-        $this->setAttribute('enctype', 'multipart/form-data');
-
-
+ 
         $this->add(array(
             'name' => 'id',
             'type' => 'Hidden',
@@ -40,15 +36,7 @@ class CommentForm extends Form {
             'name' => 'comment_date',
             'type' => 'Hidden',
         ));
-        $this->add(array(
-            'name' => 'title',
-            'type' => 'Text',
-            'attributes' => array(
-                'class' => 'form-control',
-                'placeholder' => 'Title',
-                'id' => 'title'
-            ),
-        ));
+        
 
         $this->add(array(
             'name' => 'content',
@@ -56,7 +44,9 @@ class CommentForm extends Form {
             'attributes' => array(
                 'class' => 'form-control',
                 'placeholder' => 'Content',
-                'id' => 'content'
+                'id' => 'content',
+                'maxlength'=> '255',
+                'required' => 'required',
             ),
         ));
 
@@ -66,47 +56,10 @@ class CommentForm extends Form {
              'attributes' => array(
                     'class' => 'form-control',
                     'placeholder' => 'User Name',
-                    'id' =>'photo'
+                    'id' =>'photo',
+                    'maxlength'=> '60',
+                    'required' => 'required',
                 ),
-        ));
-        $this->add(array(
-             'name' => 'type',
-             'type' => 'select',
-             'attributes' => array(
-                    'class' => 'form-control',
-                    'placeholder' => 'Type',
-                    'id' =>'commentlink'
-                ),
-            'options' => array(
-                'label' => 'Type',
-                'value_options' => array(
-                    array(
-                        'value' => 'news',
-                        'label' => 'News',
-                    ),
-                    array(
-                        'value' => 'video',
-                        'label' => 'Video',
-                    ),
-                    array(
-                        'value' => 'audio',
-                        'label' => 'Audio',
-                    ),
-                    array(
-                        'value' => 'photo',
-                        'label' => 'Photo',
-                    ),
-                ),
-            ),
-        ));
-        $this->add(array(
-            'name' => 'type_id',
-            'type' => 'Text',
-            'attributes' => array(
-                'class' => 'form-control',
-                'placeholder' => 'Type ID',
-                'id' => 'type_id'
-            ),
         ));
         
         $this->add(array(

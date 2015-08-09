@@ -118,7 +118,7 @@ class MyuploadController extends AbstractActionController {
             mkdir($dir."700-350", 0777, true);
         }
         $dir = $dir.'orginal/';
-        $files = scandir($dir);
+        $files = $this->scan_dir($dir);
         $x = 0;
         $z = 30;
         $q = ($id - 1) * $z;
@@ -148,7 +148,7 @@ class MyuploadController extends AbstractActionController {
             $filesview[] = ""
                     . "<div class='col-xs-6 col-sm-4 col-md-3 pull-right content'>"
                     . "<div onclick='selecteOneFile(this)'  class='thumbnail'>"
-                    . "<div class='deletefile' onclick='deleteFile(\"$file\")'><i class='fa fa-trash-o'></i></div>"
+                    . "<div class='deletefile' onclick='deleteFile(\"$file\",this)'><i class='fa fa-trash-o'></i></div>"
                     . "<div class='centered'>"
                     . "<img class='' src='$file'>"
                     . "</div>"
@@ -160,7 +160,7 @@ class MyuploadController extends AbstractActionController {
             $filesview[] = ""
                     . "<div class='col-xs-6 col-sm-4 col-md-3 pull-right content'>"
                     . "<div onclick='selecteOneFile(this)'  class='thumbnail'>"
-                    . "<div class='deletefile' onclick='deleteFile(\"$file\")'><i class='fa fa-trash-o'></i></div>"
+                    . "<div class='deletefile' onclick='deleteFile(\"$file\",this)'><i class='fa fa-trash-o'></i></div>"
                     . "<div class='centered'>"
                     . "<video src='$file' controls></video>"
                     . "</div>"
@@ -172,7 +172,7 @@ class MyuploadController extends AbstractActionController {
             $filesview[] = ""
                     . "<div class='col-xs-6 col-sm-4 col-md-3 pull-right content'>"
                     . "<div onclick='selecteOneFile(this)' class='thumbnail'>"
-                    . "<div class='deletefile' onclick='deleteFile(\"$file\")'><i class='fa fa-trash-o'></i></div>"
+                    . "<div class='deletefile' onclick='deleteFile(\"$file\",this)'><i class='fa fa-trash-o'></i></div>"
                     . "<div class='centered'>"
                     . "<audio src='$file' controls></audio>"
                     . "</div>"
@@ -184,4 +184,19 @@ class MyuploadController extends AbstractActionController {
             }
         return new JsonModel(array("files" => $filesview, "filesnum" => $filesnum));
     }
+    
+    	public function scan_dir($dir) {
+	    $ignored = array('.', '..', '.svn', '.htaccess');
+	
+	    $files = array();    
+	    foreach (scandir($dir) as $file) {
+	        if (in_array($file, $ignored)) continue;
+	        $files[$file] = filemtime($dir . '/' . $file);
+	    }
+	
+	    arsort($files);
+	    $files = array_keys($files);
+	
+	    return ($files) ? $files : false;
+	}
 }

@@ -31,8 +31,8 @@
                                         <thead>
                                             <tr>
                                                 <th><?php echo $this->translate('tableid');?></th>
-                                                <!-- <th><?php echo $this->translate('tabletitle');?></th> 
-                                                <th><?php echo $this->translate('tablecontent');?></th> -->
+                                                <!-- <th><?php echo $this->translate('tabletitle');?></th> -->
+                                                <th><?php echo $this->translate('tablecontent');?></th> 
                                                 <th><?php echo $this->translate('tableuser');?></th>
                                                 <th><?php echo $this->translate('tabledate');?></th>
                                                 <th>auther</th>
@@ -52,8 +52,10 @@
 <?php $this->inlineScript()->captureStart() ?>
                 
     $(document).ready(function(){
+    	var datatable;
+    	
         function fulldata(){
-            $('#commentDataTable').dataTable({
+            datatable = $('#commentDataTable').DataTable({
                 "destroy": true,
                 "lengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
                 "searching": true,
@@ -69,25 +71,31 @@
                                         }
                                     },{
                                 "targets": 1,
-                                "data": "username",
+                                "data": "content",
                                 "render": function ( data, type, full, meta ) {
                                             return data;
                                         }
                                     },{
                                 "targets": 2,
-                                "data": "comment_date",
+                                "data": "username",
                                 "render": function ( data, type, full, meta ) {
                                             return data;
                                         }
                                     },{
                                 "targets": 3,
+                                "data": "comment_date",
+                                "render": function ( data, type, full, meta ) {
+                                            return data;
+                                        }
+                                    },{
+                                "targets": 4,
                                 "data": "userid",
                                 "visible": false,
                                 "render": function ( data, type, full, meta ) {
                                             return data;
                                         }
                                     },{
-                                "targets": 4,
+                                "targets": 5,
                                 "data": "active",
                                 "render": function ( data, type, full, meta ) {
                                             var activeicon='fa fa-close';
@@ -99,7 +107,7 @@
                                             return "<a rel='" + full.id + "' class='btn btn-xs chstatus' data-toggle='tooltip' data-placement='top' title='"+ activemsg +"'><i class='"+ activeicon +"'></i></a>";
                                         }
                                     },{
-                                "targets": 5,
+                                "targets": 6,
                                 "data": "id",
                                 "render": function ( data, type, full, meta ) {
                                     return "<a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>\n\
@@ -136,6 +144,7 @@
          
         $('#commentDataTable tbody').on('click', '.delete', function () {
             var data = $(this).attr('rel');
+            var el = this;
             bootbox.confirm("<?php echo $this->translate('yesorno');?>", function(result) {
                 if(result){
                     $.post(
@@ -143,7 +152,10 @@
                              function (data){
                                  //data = JSON.stringify(data);
                                  if(data.done == 'true'){
-                                     fulldata();
+                                 console.log(datatable);
+                                      datatable.row( $(el).parents('tr') )
+					        .remove()
+					        .draw(false);
                                  }else{
                                  $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
                                      $('#error').show(150);
@@ -156,13 +168,23 @@
         
         $('#commentDataTable tbody').on('click', '.chstatus', function () {
             var data = $(this).attr('rel');
+            var el = this;
             $.post(
                     "<?php echo $this->url('Comment', array('action'=>'chstatus'));?>"+data,
                      function (data){
                          if(data.done == 'true'){
-                             fulldata();
+                             //fulldata();
+                             //console.log($(el).attr('title'));
+                             if( $(el).attr('title') == "Activate"){
+                             	$(el).attr('title', "Deactivate");
+                             	$(el).find(".fa.fa-close").attr('class','fa fa-check');
+                             }else{
+                             	$(el).attr('title', "Activate");
+                             	$(el).find(".fa.fa-check").attr('class','fa fa-close');
+                             }
+                             
                          }else{
-                         $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
+                             $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
                              $('#error').show(150);
                          }
                      }

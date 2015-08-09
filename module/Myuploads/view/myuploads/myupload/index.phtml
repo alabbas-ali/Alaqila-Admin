@@ -18,7 +18,7 @@
                             <li><a href="#tab_2" data-toggle="tab">Upload</a></li>
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane active clearfix filesdisplaytab" id="tab_1">
+                            <div class="tab-pane active clearfix filesdisplaytab" id="tab_1" style="max-height: 400px;overflow: auto;">
 
                             </div><!-- /.tab-pane -->
 
@@ -195,7 +195,7 @@
         }
     }
 
-    function deleteFile(selected) {
+    function deleteFile(selected , object) {
         var strings = selected.split('/');
         var file = strings[strings.length - 1];
         bootbox.confirm("Pleas Note That The File Will Not Be Any More Avalable , Are you sure?",
@@ -205,10 +205,11 @@
                                 {file: file},
                         function (data) {
                             if (data.done == 'true') {
-                                $("#tab_1").empty();
-		                end = false;
-		                page = 1;
-		                call2();
+                                //$("#tab_1").empty();
+		                //end = false;
+		                //page = 1;
+		                //call2();
+		                $(object.parentElement.parentElement).remove();
                             } else {
                                 $('#error').html('<h4>Error In Submit!</h4><p>' + data.message + '</p>');
                                 $('#error').show(150);
