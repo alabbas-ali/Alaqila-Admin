@@ -55,9 +55,10 @@
 <?php $this->inlineScript()->captureStart() ?>
                 
     $(document).ready(function(){
+        var datatable ;
         function fulldata(){
         
-            $('#albumDataTable').dataTable({
+            datatable = $('#albumDataTable').DataTable({
             "destroy": true,
             "searching": true,
             "processing": true,
@@ -123,6 +124,7 @@
          
         $('#albumDataTable tbody').on('click', '.delete', function () {
             var data = $(this).attr('rel');
+            var el = this;
             bootbox.confirm("<?php echo $this->translate('yesorno');?>", function(result) {
                 if(result){
                     $.post(
@@ -130,7 +132,10 @@
                              function (data){
                                  //data = JSON.stringify(data);
                                  if(data.done == 'true'){
-                                     fulldata();
+                                     //fulldata();
+                                     datatable.row( $(el).parents('tr') )
+					        .remove()
+					        .draw(false);
                                  }else{
                                  $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
                                      $('#error').show(150);
@@ -142,11 +147,19 @@
         });
         $('#albumDataTable tbody').on('click', '.chstatus', function () {
             var data = $(this).attr('rel');
+            var el = this;
             $.post(
                     "<?php echo $this->url('Pages', array('action'=>'chstatus'));?>/"+data,
                      function (data){
                          if(data.done == 'true'){
-                             fulldata();
+                             //fulldata();
+                             if( $(el).attr('title') == "Activate"){
+                             	$(el).attr('title', "Deactivate");
+                             	$(el).find(".fa.fa-close").attr('class','fa fa-check');
+                             }else{
+                             	$(el).attr('title', "Activate");
+                             	$(el).find(".fa.fa-check").attr('class','fa fa-close');
+                             }
                          }else{
                          $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
                              $('#error').show(150);

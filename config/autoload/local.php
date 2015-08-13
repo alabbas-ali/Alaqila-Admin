@@ -23,8 +23,6 @@ return array(
                     'user'     => 'alaq365_zend',
                     'password' => 'no1stand@last',
                     'dbname'   => 'alaq365_zend', 
-                    'encoding' => "UTF-8",
-                    'charset' => "utf8",
                     /*'host'     => 'localhost',
                     'port'     => '3306',
                     'user'     => 'root',

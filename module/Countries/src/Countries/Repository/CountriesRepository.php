@@ -15,7 +15,6 @@
 namespace Countries\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use ZfcUser\Controller\Plugin\ZfcUserAuthentication as Plugin;
 
 class CountriesRepository extends EntityRepository {
 
