@@ -17,6 +17,7 @@ return array(
         'Audio',
         'Photo',
         'Comment',
+        'Notification',
         'Visit',
         'Advertisement',
         'Programs',

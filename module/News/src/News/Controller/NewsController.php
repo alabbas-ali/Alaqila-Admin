@@ -57,21 +57,21 @@ class NewsController extends AbstractActionController {
         return new JsonModel(array("data" => $data));
     }
     
-//    public function commentsAction(){
+//    public function notificationsAction(){
 //        $id = (int) $this->params()->fromRoute('id', 0);
 //        return new ViewModel(array('id' => $id));
 //    }
-//    public function getcommentsAction(){
+//    public function getnotificationsAction(){
 //        $id = (int) $this->params()->fromRoute('id', 0);
 //        if (!$id) {
 //            return $this->redirect()->toRoute('News');
 //        }
-//        $comments = $this->getEntityManager()->getRepository('Comment\Model\Comment')->findBy(array('type' => 'news', 'type_id' => $id));
-//        //var_dump($comments);die;
+//        $notifications = $this->getEntityManager()->getRepository('Comment\Model\Comment')->findBy(array('type' => 'news', 'type_id' => $id));
+//        //var_dump($notifications);die;
 //        $data = array();
 //        //$i=0;
-//        foreach ($comments as $comment) {
-//            $data[] = $comment->getArrayCopy();
+//        foreach ($notifications as $notification) {
+//            $data[] = $notification->getArrayCopy();
 //        }
 //        return new JsonModel(array("data" => $data));
 //    }
