@@ -24,24 +24,22 @@ $this->headTitle($title);
                     <?php
                     $form = $this->form;
                     $form->setAttribute('action', $this->url('Comment', array('action' => 'edit', 'id' => $this->id,)));
+                    $form->setAttribute('data-toggle' , 'validator');
+                    $form->setAttribute('role', 'form');
                     $form->prepare();
 
                     echo $this->form()->openTag($form);
                     echo $this->formHidden($form->get('id'));
                     echo $this->formHidden($form->get('comment_date'));
                     ?>
-                    <div class="form-group">
-                        <label for='title'><?php echo $this->translate('titleform');?></label>
-                        <?php
-                        echo $this->formRow($form->get('title'));
-                        ?>
-                    </div>
+                    
                     
                     <div class="form-group">
                         <label for='content'><?php echo $this->translate('contentform');?></label>
                         <?php
                         echo $this->formRow($form->get('content'));
                         ?>
+                        <span class="help-block with-errors"> <?php echo $this->translate('arabicTitleVal');?> ?;,{}()[\]\-_+=!@#$%\^&*|</span>
                     </div>
                     
                     <div class="form-group">
@@ -49,22 +47,9 @@ $this->headTitle($title);
                         <?php
                         echo $this->formRow($form->get('username'));
                         ?>
+                        <span class="help-block with-errors"></span>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for='type'><?php echo $this->translate('typeform');?></label>
-                        <?php
-                        echo $this->formRow($form->get('type'));
-                        ?>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for='type_id'><?php echo $this->translate('typeidform');?></label>
-                        <?php
-                        echo $this->formRow($form->get('type_id'));
-                        ?>
-                    </div>
-                    
+
                     <div class="box-footer">
                         <?php
                         echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));

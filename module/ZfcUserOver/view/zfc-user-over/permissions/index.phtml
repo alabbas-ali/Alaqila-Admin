@@ -6,10 +6,8 @@
         </div>
         <div class="modal-body">
             <!-- Main content -->
-            <div class="row">
-                <div class="col-xs-12">
                     <p class="text-danger"></p>
-                    <div class='row'>
+                    
                         <a href='#' id='select-all'>Select All</a> /
                         <a href='#' id='deselect-all'>Deselect All</a>
                         <select multiple id="usersP" name="searchable[]">
@@ -24,10 +22,7 @@
                                     <?php echo $user['username']; ?></option> 
                             <?php } ?>
                         </select>
-
-                    </div>
-                </div>
-            </div>
+                    
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

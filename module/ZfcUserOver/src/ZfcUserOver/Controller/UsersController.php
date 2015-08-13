@@ -74,6 +74,10 @@ class UsersController extends AbstractActionController {
             if ($form->isValid()) {
                 $data = $form->getData();
                 $user->exchangeArray($data);
+                $user->setContent('');
+                $user->setArcontent('');
+                $user->setSubtitle('');
+                $user->setSubartitle('');
                 $user->password=$this->getUserService()->getnewpass($user->password);
                 $user->isAdmin= false;
                 $this->getEntityManager()->persist($user);

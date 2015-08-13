@@ -49,8 +49,9 @@
 <?php $this->inlineScript()->captureStart() ?>
                 
     $(document).ready(function(){
+    var datatable;
         function fulldata(){
-            $('#visitDataTable').dataTable({
+            datatable = $('#visitDataTable').DataTable({
             "destroy": true,
             "lengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
             "searching": true,
@@ -90,6 +91,7 @@
          
         $('#visitDataTable tbody').on('click', '.delete', function () {
             var data = $(this).attr('rel');
+            var el = this;
             bootbox.confirm("Are you sure?", function(result) {
                 if(result){
                     $.post(
@@ -97,7 +99,10 @@
                              function (data){
                                  //data = JSON.stringify(data);
                                  if(data.done == 'true'){
-                                     fulldata();
+                                     //fulldata();
+                                     datatable.row( $(el).parents('tr') )
+					        .remove()
+					        .draw(false);
                                  }else{
                                  $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
                                      $('#error').show(150);
