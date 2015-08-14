@@ -22,7 +22,7 @@ use Zend\InputFilter\InputFilterInterface;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="comment")
+ * @ORM\Table(name="notification")
  */
 class Notification implements InputFilterAwareInterface {
 
@@ -39,16 +39,6 @@ class Notification implements InputFilterAwareInterface {
     /**
      * @ORM\Column(type="string")
      */
-    protected $content;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected $username;
-
-    /**
-     * @ORM\Column(type="string")
-     */
     protected $type;
 
     /**
@@ -57,12 +47,22 @@ class Notification implements InputFilterAwareInterface {
     protected $type_id;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $user_type;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $user_id;
+
+    /**
      * @ORM\Column(type="string")
      */
-    protected $comment_date;
+    protected $notification_date;
 
     /**  @ORM\Column(type="boolean") */
-    protected $active;
+    protected $seen;
 
     /**
      * @param string $property
@@ -82,11 +82,12 @@ class Notification implements InputFilterAwareInterface {
 
     public function exchangeArray($data) {
         $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->content = (isset($data['content'])) ? $data['content'] : null;
-        $this->username = (isset($data['username'])) ? $data['username'] : null;
         $this->type = (isset($data['type'])) ? $data['type'] : null;
         $this->type_id = (isset($data['type_id'])) ? $data['type_id'] : null;
-        $this->comment_date = (isset($data['comment_date'])) ? $data['comment_date'] : date('Y-m-d H:i:s');
+        $this->user_type = (isset($data['user_type'])) ? $data['user_type'] : null;
+        $this->user_id = (isset($data['user_id'])) ? $data['user_id'] : null;
+        $this->notification_date = (isset($data['notification_date'])) ? $data['notification_date'] : date('Y-m-d H:i:s');
+        $this->seen = (isset($data['seen'])) ? $data['seen'] : '0';
     }
 
     // Add the following method:

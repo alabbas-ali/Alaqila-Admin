@@ -1,6 +1,6 @@
  <?php
- // module/Notification/view/comment/comment/index.phtml:
- $title = 'My comment';
+ // module/Notification/view/notification/notification/index.phtml:
+ $title = 'My notification';
  $this->headTitle($title);
  ?>
             <!-- Content Header (Page header) -->
@@ -28,7 +28,7 @@
                                     </p>-->
                                 </div>
                                 <div class="box-body">
-                                    <table id="commentDataTable" class="table table-bordered table-hover dataTable" cellspacing="0" width="100%">
+                                    <table id="notificationDataTable" class="table table-bordered table-hover dataTable" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
@@ -54,7 +54,7 @@
     $(document).ready(function(){
     	var datatable;
         function fulldata(){
-           datatable = $('#commentDataTable').DataTable({
+           datatable = $('#notificationDataTable').DataTable({
 	            "destroy": true,
 	            "lengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
 	            "searching": true,
@@ -82,7 +82,7 @@
                                     }
 				},{
                             "targets": 3,
-                            "data": "comment_date",
+                            "data": "notification_date",
                             "render": function ( data, type, full, meta ) {
 					return data;
                                     }
@@ -111,7 +111,7 @@
         
         fulldata();
          
-        $('#commentDataTable tbody').on('click', '.delete', function () {
+        $('#notificationDataTable tbody').on('click', '.delete', function () {
             var data = $(this).attr('rel');
             var el = this;
             bootbox.confirm("Are you sure?", function(result) {
@@ -135,7 +135,7 @@
             }); 
         });
         
-        $('#commentDataTable tbody').on('click', '.chstatus', function () {
+        $('#notificationDataTable tbody').on('click', '.chstatus', function () {
             var data = $(this).attr('rel');
             var el = this;
             $.post(

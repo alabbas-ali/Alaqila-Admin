@@ -1,7 +1,7 @@
 <?php
-// module/Notification/view/comment/comment/add.phtml:
+// module/Notification/view/notification/notification/add.phtml:
 
-$title = $this->translate('add')." ".$this->translate('commentspagetitle');
+$title = $this->translate('add')." ".$this->translate('notificationspagetitle');
 $this->headTitle($title);
 ?>
 <section class="content-header">
@@ -10,7 +10,7 @@ $this->headTitle($title);
     </h1>
     <ol class="breadcrumb">
         <li><a href="<?php echo $this->url('home') ?>"><i class="fa fa-dashboard"></i><?php echo $this->translate('dashbord');?></a></li>
-        <li><a href="<?php echo $this->url('Notification') ?>"><?php echo $this->translate('commentspagetitle');?></a></li>
+        <li><a href="<?php echo $this->url('Notification') ?>"><?php echo $this->translate('notificationspagetitle');?></a></li>
         <li class="active"><?php echo $this->escapeHtml($title); ?></li>
     </ol>
 </section>

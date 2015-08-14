@@ -35,53 +35,119 @@ class NotificationController extends AbstractActionController {
         return new ViewModel();
     }
 
-    public function getAllAction() {
+    public function getAllNotificationAction(){
         $user=$this->zfcUserAuthentication()->getIdentity();
         if (!$user->isAdmin) {
+            $notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_id' => $user) , array('id' => 'DESC'));
+            //var_dump($notifications);die;
+        } else {
+            //$notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_type' => '1') , array('id' => 'DESC'));
             $qb = $this->getEntityManager()->createQueryBuilder();
-            $qb->select('c.id','c.title','c.content','c.username','c.type','c.type_id','c.comment_date','c.active')
-                ->from('Notification\Model\Notification', 'c')
-                ->where("c.type_id in (select news.id from News\Model\News news where news.user='".$user->id."') and c.type='news'")
-                ->orWhere("c.type_id in (select audio.id from Audio\Model\Audio audio where audio.user='".$user->id."') and c.type='audio'")
-                ->orWhere("c.type_id in (select photo.id from Photo\Model\Photo photo where photo.user='".$user->id."') and c.type='photo'")
-                ->orWhere("c.type_id in (select video.id from Video\Model\Video video where video.user='".$user->id."') and c.type='video'")
-                ;
+            $qb->select('n.id','n.type','n.type_id','n.notification_date','n.user_type','n.user_id')
+                ->from('Notification\Model\Notification', 'n')
+                ->where("n.user_type='1'")
+                ->orWhere("n.user_id='".$user->id."'");
 
             $query = $qb->getQuery();
-            $olddata=$qb->getQuery()->getResult();
-            $data=array();
-            foreach($olddata as $row){
-                $row['userid']=$user->id;
-                $data[]=$row;
-            }
-        } else {
-            $comments = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findAll();
-            $data = array();
-            //$i=0;
-            $typeTableArr=array('news'=>'News\Model\News','video'=>'Video\Model\Video',
-                'audio'=>'Audio\Model\Audio','photo'=>'Photo\Model\Photo');
-            foreach ($comments as $comment) {
-                $item= $comment->getArrayCopy();
-                
-                if(isset($typeTableArr[$item['type']])){
-                    $typerec = $this->getEntityManager()->find($typeTableArr[$item['type']], $item['type_id']);
-                    if($typerec){
-                        $typeData=$typerec->getArrayCopy();
-                        $item['userid']=$typerec->user->id;
-                    }
-                }
-                if(!isset($item['userid'])){
-                    $item['userid']=$user->id;
-                }
-                $data[] =$item;
-            }
+            $notifications=$qb->getQuery()->getResult();
+            //var_dump($olddata);die;
             
         }
         
+        $data = array();
+        //$i=0;
+        foreach ($notifications as $notif) {
+            if(is_object($notif))
+                $notif=$notif->getArrayCopy();
+            
+            switch ($notif['type']){
+                case 'news':
+                    $notif['style']='fa-newspaper-o text-aqua';
+                    $notif['text']='new news added';
+                    break;
+                case 'video':
+                    $notif['style']='fa-video-camera text-red';
+                    $notif['text']='new video added';
+                    break;
+                case 'audio':
+                    $notif['style']='fa-microphone text-black';
+                    $notif['text']='new audio added';
+                    break;
+                case 'photo':
+                    $notif['style']='fa-camera text-orange';
+                    $notif['text']='new photo added';
+                    break;
+                case 'comment':
+                    $notif['style']='fa-comment text-green';
+                    $notif['text']='new comment';
+                    break;
+                default :
+                    $notif['style']='fa-users text-aqua';
+                    $notif['text']='77 new members joined today';
+                    break;
+            }
+            $data[] = $notif;
+        }
+        return new JsonModel(array("num" => count($data),"data" => $data));
+    }
+    
+    public function goAction() {
+        $id = (int) $this->params()->fromRoute('id', 0);
+        $notification = $this->getEntityManager()->find('Notification\Model\Notification', $id);
+        $this->getEntityManager()->remove($notification);
+        $this->getEntityManager()->flush();
+        switch ($notification->type){
+                case 'news':
+                    $url=$this->redirect()->toRoute('News',array('action'=>'edit','id'=>$notification->type_id));
+                    break;
+                case 'video':
+                    $url=$this->redirect()->toRoute('Video',array('action'=>'edit','id'=>$notification->type_id));
+                    break;
+                case 'audio':
+                    $url=$this->redirect()->toRoute('Audio',array('action'=>'edit','id'=>$notification->type_id));
+                    break;
+                case 'photo':
+                    $url=$this->redirect()->toRoute('Photo',array('action'=>'edit','id'=>$notification->type_id));
+                    break;
+                case 'comment':
+                    $url=$this->redirect()->toRoute('Comment',array('action'=>'edit','id'=>$notification->type_id));
+                    break;
+                default :
+                    $url=$this->redirect()->toRoute('home');
+                    break;
+            }
+        return $url;
+    }
+
+    public function getAllAction() {
+        $user=$this->zfcUserAuthentication()->getIdentity();
+        if (!$user->isAdmin) {
+            $notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_id' => $user) , array('id' => 'DESC'));
+            //var_dump($notifications);die;
+        } else {
+            //$notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_type' => '1') , array('id' => 'DESC'));
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $qb->select('n.id','n.type','n.type_id','n.notification_date','n.user_type','n.user_id')
+                ->from('Notification\Model\Notification', 'n')
+                ->where("n.user_type='1'")
+                ->orWhere("n.user_id='".$user->id."'");
+
+            $query = $qb->getQuery();
+            $notifications=$qb->getQuery()->getResult();
+            //var_dump($olddata);die;
+            
+        }
+        $data = array();
+        //$i=0;
+        foreach ($notifications as $notif) {
+            if(is_object($notif))
+                $notif=$notif->getArrayCopy();
+            $data[] = $notif;
+        }
         return new JsonModel(array("data" => $data));
     }
     
-    public function commentsAction(){
+    public function notificationsAction(){
         $type = $this->params()->fromRoute('type', 0);
         $id = (int) $this->params()->fromRoute('id', 0);
         return new ViewModel(array('type' => $type,'id' => $id));
@@ -92,13 +158,13 @@ class NotificationController extends AbstractActionController {
         if (!$id) {
             return $this->redirect()->toRoute('News');
         }
-        $comments = $this->getEntityManager()->getRepository('Notification\Model\Notification')
+        $notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')
                 ->findBy(array('type' => $type, 'type_id' => $id) , array('id' => 'DESC'));
-        //var_dump($comments);die;
+        //var_dump($notifications);die;
         $data = array();
         //$i=0;
-        foreach ($comments as $comment) {
-            $data[] = $comment->getArrayCopy();
+        foreach ($notifications as $notification) {
+            $data[] = $notification->getArrayCopy();
         }
         return new JsonModel(array("data" => $data));
     }
@@ -106,13 +172,13 @@ class NotificationController extends AbstractActionController {
     public function getActiveNotificationsAction(){
         $id = (int) $this->params()->fromRoute('id', 0);
         $type = $this->params()->fromRoute('type', 0);
-        $comments = $this->getEntityManager()->getRepository('Notification\Model\Notification')
+        $notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')
                 ->findBy(array('type' => $type, 'type_id' => $id , 'active' => true) , array('id' => 'DESC'));
-        //var_dump($comments);die;
+        //var_dump($notifications);die;
         $data = array();
         //$i=0;
-        foreach ($comments as $comment) {
-            $data[] = $comment->getArrayCopy();
+        foreach ($notifications as $notification) {
+            $data[] = $notification->getArrayCopy();
         }
         return new JsonModel($data);
     }
@@ -120,11 +186,11 @@ class NotificationController extends AbstractActionController {
     public function addAction() {
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $comment = new Notification();
+            $notification = new Notification();
             $data = get_object_vars($request->getPost());
-            $comment->exchangeArray($data);
-            $comment->active=0;
-            $this->getEntityManager()->persist($comment);
+            $notification->exchangeArray($data);
+            $notification->active=0;
+            $this->getEntityManager()->persist($notification);
             $this->getEntityManager()->flush();
             return new JsonModel();
         }
@@ -139,20 +205,20 @@ class NotificationController extends AbstractActionController {
             ));
         }
 
-        $comment = $this->getEntityManager()->find('Notification\Model\Notification', $id);
-        if (!$comment) {
+        $notification = $this->getEntityManager()->find('Notification\Model\Notification', $id);
+        if (!$notification) {
             return $this->redirect()->toRoute('Notification', array(
                         'action' => 'index'
             ));
         }
 
         $form = new NotificationForm();
-        $form->bind($comment);
+        $form->bind($notification);
         $form->get('submit')->setAttribute('value', 'Edit');
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $form->setInputFilter($comment->getInputFilter());
+            $form->setInputFilter($notification->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $this->getEntityManager()->flush();
@@ -174,9 +240,9 @@ class NotificationController extends AbstractActionController {
             return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Delete This'));
         }
         
-        $comment = $this->getEntityManager()->find('Notification\Model\Notification', $id);
-        if ($comment) {
-            $this->getEntityManager()->remove($comment);
+        $notification = $this->getEntityManager()->find('Notification\Model\Notification', $id);
+        if ($notification) {
+            $this->getEntityManager()->remove($notification);
             $this->getEntityManager()->flush();
             return new JsonModel(array("done" => 'true', 'message' => 'Notification Have been Deletet'));
         }
@@ -188,9 +254,9 @@ class NotificationController extends AbstractActionController {
             return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Edit This'));
         }
         
-        $comment = $this->getEntityManager()->find('Notification\Model\Notification', $id);
-        if ($comment) {
-            $comment->active=!$comment->active;
+        $notification = $this->getEntityManager()->find('Notification\Model\Notification', $id);
+        if ($notification) {
+            $notification->active=!$notification->active;
             $this->getEntityManager()->flush();
             return new JsonModel(array("done" => 'true', 'message' => 'Notification Has been Edited'));
         }

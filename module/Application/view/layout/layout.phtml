@@ -62,23 +62,19 @@
                             <!-- Notifications Menu -->
                             <li class="dropdown notifications-menu">
                                 <!-- Menu toggle button -->
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <a href="#" id="notification_icon" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning">10</span>
+                                    
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header">You have 10 notifications</li>
-                                    <li>
+                                    <!--<li class="header">You have 10 notifications</li>-->
+                                    <li id="notification_list">
                                         <!-- Inner Menu: contains the notifications -->
-                                        <ul class="menu">
-                                            <li><!-- start notification -->
-                                                <a href="#">
-                                                    <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                                </a>
-                                            </li><!-- end notification -->                      
+                                        <ul class="menu" id="notification_menu">
+                                            <!--<li><a href="#"><i class="fa fa-users text-aqua"></i> 5 new members joined today</a></li>-->
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="#">View all</a></li>
+                                    <li class="footer"><a id="notification_viewall" href="<?php echo $this->url('Notification') ?>">View all</a></li>
                                 </ul>
                             </li>
                             <!-- Tasks Menu
@@ -242,6 +238,17 @@
                     }
                 }
              });
+            $.post( '<?php echo $this->url('Notification', array('action' => 'getAllNotification')) ?>' , function( data ) {
+        if(data.num>0){
+            $('#notification_icon').append('<span class="label label-warning">'+data.num+'</span>');
+        }        
+        
+                $('#notification_list').before('<li class="header">You have '+data.num+' notifications</li>');
+    var alldata=data.data;  
+    for (var key in alldata) {
+                    $('#notification_menu').append('<li><a href="<?php echo $this->url('Notification', array('action' => 'go')) ?>'+alldata[key]['id']+'"><i class="fa '+alldata[key]['style']+'"></i> '+alldata[key]['text']+'</a></li>')
+                }
+            });
         </script>
     </body>
 </html>

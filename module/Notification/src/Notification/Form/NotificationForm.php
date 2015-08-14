@@ -33,7 +33,7 @@ class NotificationForm extends Form {
             'type' => 'Hidden',
         ));
         $this->add(array(
-            'name' => 'comment_date',
+            'name' => 'notification_date',
             'type' => 'Hidden',
         ));
         
