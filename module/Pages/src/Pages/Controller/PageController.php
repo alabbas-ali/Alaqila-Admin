@@ -18,6 +18,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Pages\Model\Page;
+use Notification\Model\Notification;
 use Pages\Form\PageForm;
 use Doctrine\ORM\EntityManager;
 
@@ -131,6 +132,12 @@ class PageController extends AbstractActionController {
                 			->getQuery()->getSingleScalarResult();
                 $page->ord = $highest_order + 1;
                 $this->getEntityManager()->persist($page);
+                $this->getEntityManager()->flush();
+                $id=$page->getId();
+                $notification = new Notification();
+                $notData=array('type'=>'page','type_id'=>$id,'user_type'=>'1');
+                $notification->exchangeArray($notData);
+                $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();
 
                 // Redirect to list of albums

@@ -64,6 +64,10 @@ class Comment implements InputFilterAwareInterface {
     /**  @ORM\Column(type="boolean") */
     protected $active;
 
+    public function getId() {
+        return $this->id;
+    }
+
     /**
      * @param string $property
      * @return mixed

@@ -18,6 +18,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use News\Model\News;
+use Notification\Model\Notification;
 use News\Form\NewsForm;
 use Visit\Model\Visit;
 
@@ -259,7 +260,13 @@ class NewsController extends AbstractActionController {
                 
                 $this->getEntityManager()->persist($news);
                 $this->getEntityManager()->flush();
-
+                $id=$news->getId();
+                $notification = new Notification();
+                $notData=array('type'=>'news','type_id'=>$id,'user_type'=>'1');
+                $notification->exchangeArray($notData);
+                $this->getEntityManager()->persist($notification);
+                $this->getEntityManager()->flush();
+                
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('News');
             }

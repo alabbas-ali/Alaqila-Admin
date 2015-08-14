@@ -51,6 +51,10 @@ class Page implements InputFilterAwareInterface {
 /**  @ORM\Column(type="integer") */
     protected $ord;
 
+    public function getId() {
+        return $this->id;
+    }
+
     function getName() {
         return $this->name;
     }

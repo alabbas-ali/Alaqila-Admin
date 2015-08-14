@@ -79,11 +79,15 @@ class NotificationController extends AbstractActionController {
                     break;
                 case 'comment':
                     $notif['style']='fa-comment text-green';
-                    $notif['text']='new comment';
+                    $notif['text']='new comment added';
+                    break;
+                case 'page':
+                    $notif['style']='fa-file-text text-yellow';
+                    $notif['text']='new page added';
                     break;
                 default :
                     $notif['style']='fa-users text-aqua';
-                    $notif['text']='77 new members joined today';
+                    $notif['text']='';
                     break;
             }
             $data[] = $notif;

@@ -84,8 +84,8 @@ class Notification implements InputFilterAwareInterface {
         $this->id = (isset($data['id'])) ? $data['id'] : null;
         $this->type = (isset($data['type'])) ? $data['type'] : null;
         $this->type_id = (isset($data['type_id'])) ? $data['type_id'] : null;
-        $this->user_type = (isset($data['user_type'])) ? $data['user_type'] : null;
-        $this->user_id = (isset($data['user_id'])) ? $data['user_id'] : null;
+        $this->user_type = (isset($data['user_type'])) ? $data['user_type'] : '0';
+        $this->user_id = (isset($data['user_id'])) ? $data['user_id'] : '0';
         $this->notification_date = (isset($data['notification_date'])) ? $data['notification_date'] : date('Y-m-d H:i:s');
         $this->seen = (isset($data['seen'])) ? $data['seen'] : '0';
     }

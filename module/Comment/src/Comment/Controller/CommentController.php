@@ -18,6 +18,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Comment\Model\Comment;
+use Notification\Model\Notification;
 use Comment\Form\CommentForm;
 
 class CommentController extends AbstractActionController {
@@ -126,6 +127,25 @@ class CommentController extends AbstractActionController {
             $comment->active=0;
             $this->getEntityManager()->persist($comment);
             $this->getEntityManager()->flush();
+            $id=$comment->getId();
+            
+            $comment = $this->getEntityManager()->find('Comment\Model\Comment', $id);
+            $typeTableArr=array('news'=>'News\Model\News','video'=>'Video\Model\Video',
+                'audio'=>'Audio\Model\Audio','photo'=>'Photo\Model\Photo');
+            if(isset($typeTableArr[$comment->type)){
+                $typerec = $this->getEntityManager()->find($typeTableArr[$comment->type], $comment->type_id);
+                if($typerec){
+                    $typeData=$typerec->getArrayCopy();
+                    $userid=$typerec->user->id;
+                    $notification = new Notification();
+                    $notData=array('type'=>'comment','type_id'=>$id,'user_id'=>$userid);
+                    $notification->exchangeArray($notData);
+                    $this->getEntityManager()->persist($notification);
+                    $this->getEntityManager()->flush();
+                }
+            }
+            
+            
             return new JsonModel();
         }
         return new JsonModel();

@@ -18,6 +18,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Audio\Model\Audio;
+use Notification\Model\Notification;
 use Audio\Form\AudioForm;
 use Visit\Model\Visit;
 
@@ -244,6 +245,12 @@ class AudioController extends AbstractActionController {
                 $audio->active=1;
                 
                 $this->getEntityManager()->persist($audio);
+                $this->getEntityManager()->flush();
+                $id=$audio->getId();
+                $notification = new Notification();
+                $notData=array('type'=>'audio','type_id'=>$id,'user_type'=>'1');
+                $notification->exchangeArray($notData);
+                $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();
 
                 // Redirect to list of albums

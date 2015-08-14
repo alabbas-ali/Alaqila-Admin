@@ -18,6 +18,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Video\Model\Video;
+use Notification\Model\Notification;
 use Video\Form\VideoForm;
 use Visit\Model\Visit;
 
@@ -245,6 +246,12 @@ class VideoController extends AbstractActionController {
                 $video->active=1;
                 
                 $this->getEntityManager()->persist($video);
+                $this->getEntityManager()->flush();
+                $id=$video->getId();
+                $notification = new Notification();
+                $notData=array('type'=>'video','type_id'=>$id,'user_type'=>'1');
+                $notification->exchangeArray($notData);
+                $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();
 
                 // Redirect to list of albums

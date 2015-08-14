@@ -18,6 +18,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Photo\Model\Photo;
+use Notification\Model\Notification;
 use Photo\Form\PhotoForm;
 use Visit\Model\Visit;
 
@@ -242,6 +243,12 @@ class PhotoController extends AbstractActionController {
                 $photo->active=1;
                 
                 $this->getEntityManager()->persist($photo);
+                $this->getEntityManager()->flush();
+                $id=$photo->getId();
+                $notification = new Notification();
+                $notData=array('type'=>'photo','type_id'=>$id,'user_type'=>'1');
+                $notification->exchangeArray($notData);
+                $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();
 
                 // Redirect to list of albums
