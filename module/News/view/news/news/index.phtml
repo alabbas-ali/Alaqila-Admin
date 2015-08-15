@@ -110,7 +110,7 @@
                                     }
                                     
                                     return "<a rel='" + data + "' class='btn btn-xs chstatus' data-toggle='tooltip' data-placement='top' title='"+ activemsg +"'><i class='"+ activeicon +"'></i></a>\n\
-                                            <a href='<?php echo $this->url('viewComments', array('action'=>'notifications','type'=>'news'));?>"+ data +"' class='btn btn-xs' data-toggle='tooltip' data-placement='top' title='Comments'><i class='fa fa-notifications'></i></a>\n\
+                                            <a href='<?php echo $this->url('viewComments', array('action'=>'comments','type'=>'news'));?>"+ data +"' class='btn btn-xs' data-toggle='tooltip' data-placement='top' title='Comments'><i class='fa fa-comments'></i></a>\n\
                                             <a href='<?php echo $this->url('News', array('action'=>'edit'));?>"+ data +"' class='btn btn-xs' data-toggle='tooltip' data-placement='top' title='Edit'><i class='fa fa-edit'></i></a>\n\
                                             <a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>";
                                 }
