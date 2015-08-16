@@ -102,7 +102,8 @@ class PageController extends AbstractActionController {
                         \Doctrine\ORM\Query\Expr\Join::WITH,
                         "r.userid = c.id"
                 )
-                ->where("r.instanceid = $id AND r.context='page'");
+                ->where("r.instanceid = $id AND r.context='page'")
+                ->orderBy('c.username', 'DESC');
         $users=$querybuilder->getQuery()->getResult();
         //$page = $this->getEntityManager()->find('Pages\Model\Page', $id);
         $data = array();
