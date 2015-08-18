@@ -63,27 +63,27 @@ class NotificationController extends AbstractActionController {
             switch ($notif['type']){
                 case 'news':
                     $notif['style']='fa-newspaper-o text-aqua';
-                    $notif['text']='new news added';
+                    $notif['text']='تمت اضافة خبر جديد';
                     break;
                 case 'video':
                     $notif['style']='fa-video-camera text-red';
-                    $notif['text']='new video added';
+                    $notif['text']='تمت اضافة فيديو جديد';
                     break;
                 case 'audio':
                     $notif['style']='fa-microphone text-black';
-                    $notif['text']='new audio added';
+                    $notif['text']='تمت اضافة تسجيل جديد';
                     break;
                 case 'photo':
                     $notif['style']='fa-camera text-orange';
-                    $notif['text']='new photo added';
+                    $notif['text']='تمت اضافة صورة جديدة';
                     break;
                 case 'comment':
                     $notif['style']='fa-comment text-green';
-                    $notif['text']='new comment added';
+                    $notif['text']='تمت اضافة تعليق جديد';
                     break;
                 case 'page':
                     $notif['style']='fa-file-text text-yellow';
-                    $notif['text']='new page added';
+                    $notif['text']='تمت اضافة صفحة جديد';
                     break;
                 default :
                     $notif['style']='fa-users text-aqua';
