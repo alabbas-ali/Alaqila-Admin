@@ -132,7 +132,7 @@ class CommentController extends AbstractActionController {
             $comment = $this->getEntityManager()->find('Comment\Model\Comment', $id);
             $typeTableArr=array('news'=>'News\Model\News','video'=>'Video\Model\Video',
                 'audio'=>'Audio\Model\Audio','photo'=>'Photo\Model\Photo');
-            if(isset($typeTableArr[$comment->type)){
+            if(isset($typeTableArr[$comment->type])){
                 $typerec = $this->getEntityManager()->find($typeTableArr[$comment->type], $comment->type_id);
                 if($typerec){
                     $typeData=$typerec->getArrayCopy();
