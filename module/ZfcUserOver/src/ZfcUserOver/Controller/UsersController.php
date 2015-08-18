@@ -202,6 +202,22 @@ class UsersController extends AbstractActionController {
         return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Edit This'));
     }
     
+    public function chpublicAction() {
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Edit This'));
+        }
+        
+        $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $id);
+        if ($user) {
+            if($user->isPublic==1) $user->isPublic=0;
+            else $user->isPublic=1;
+            $this->getEntityManager()->flush();
+            return new JsonModel(array("done" => 'true', 'message' => 'User Have been Edited'));
+        }
+        return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Edit This'));
+    }
+    
     public function chtypesvAction() {
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {

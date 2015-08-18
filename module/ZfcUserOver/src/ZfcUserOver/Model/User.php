@@ -75,6 +75,12 @@ class User implements UserInterface,InputFilterAwareInterface {
     protected $isAdmin;
     
     /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    protected $isPublic;
+    
+    /**
      * @var string
      * @ORM\Column(type="string", length=255)
      */
@@ -304,6 +310,26 @@ class User implements UserInterface,InputFilterAwareInterface {
         $this->isAdmin = $isAdmin;
     }
     
+    /**
+     * Get isPublic.
+     *
+     * @return int
+     */
+    public function getIsPublic() {
+        return $this->isPublic;
+    }
+
+    /**
+     * Set isPublic.
+     *
+     * @param int $isPublic
+     *
+     * @return void
+     */
+    public function setIsPublic($isPublic) {
+        $this->isPublic = $isPublic;
+    }
+    
     function getContent() {
         return $this->content;
     }
@@ -363,6 +389,7 @@ class User implements UserInterface,InputFilterAwareInterface {
         $this->displayName = $data['displayName'];
         $this->photo = $data['photo'];
         $this->password = $data['password'];
+        $this->isPublic =  (isset($data['isPublic'])) ? $data['isPublic'] : '0';
         $this->facebook =  (isset($data['facebook'])) ? $data['facebook'] : null;
         $this->instagram =  (isset($data['instagram'])) ? $data['instagram'] : null;
         $this->twitter =  (isset($data['twitter'])) ? $data['twitter'] : null;

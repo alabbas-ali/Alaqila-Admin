@@ -33,6 +33,7 @@
                                                 <th><?php echo $this->translate('tableemail');?></th>
                                                 <th><?php echo $this->translate('tabledisplayname');?></th>
                                                 <th><?php echo $this->translate('tablestatus');?></th>
+                                                <th><?php echo $this->translate('tableispublic');?></th>
                                                 <th><?php echo $this->translate('tableisadmin');?></th>
                                                 <th><?php echo $this->translate('tableissupervisor');?></th>
                                                 <th><?php echo $this->translate('tableoptions');?></th>
@@ -90,6 +91,19 @@
                                     }
 				},{
 			    "targets": 5,
+                            "data": "isPublic",
+                            <?php if($this->zfcUserIdentity()->getIsAdmin()!='1') echo '"visible": false,';?>
+                            "render": function ( data, type, full, meta ) {
+                                        var ispublicicon='fa fa-close';
+                                        var ispublicmsg='Set As Public';
+                                        if(data==1){
+                                            ispublicicon='fa fa-check';
+                                            ispublicmsg='Set As Private';
+                                        }
+                                        return "<a rel='" + full.id + "' class='btn btn-xs chpublic' data-toggle='tooltip' data-placement='top' title='"+ ispublicmsg +"'><i class='"+ ispublicicon +"'></i></a>";
+                                    }
+				},{
+			    "targets": 6,
                             "data": "isAdmin",
                             <?php if($this->zfcUserIdentity()->getIsAdmin()!='1') echo '"visible": false,';?>
                             "render": function ( data, type, full, meta ) {
@@ -102,7 +116,7 @@
                                         return "<a rel='" + full.id + "' class='btn btn-xs chtype' data-toggle='tooltip' data-placement='top' title='"+ isadminmsg +"'><i class='"+ isadminicon +"'></i></a>";
                                     }
 				},{
-                            "targets": 6,
+                            "targets": 7,
                             "data": "isAdmin",
                             <?php if($this->zfcUserIdentity()->getIsAdmin()!='1') echo '"visible": false,';?>
                             "render": function ( data, type, full, meta ) {
@@ -115,7 +129,7 @@
                                         return "<a rel='" + full.id + "' class='btn btn-xs chtypesv' data-toggle='tooltip' data-placement='top' title='"+ isadminmsg +"'><i class='"+ isadminicon +"'></i></a>";
                                     }
 				},{
-                            "targets": 7,
+                            "targets": 8,
                             "data": "id",
                             "render": function ( data, type, full, meta ) {
                                     return "<a href='<?php echo $this->url('Users', array('action'=>'edit'));?>/"+ data +"' class='btn btn-xs' data-toggle='tooltip' data-placement='top' title='Edit'><i class='fa fa-edit'></i></a>\n\
@@ -151,6 +165,20 @@
             var data = $(this).attr('rel');
             $.post(
                     "<?php echo $this->url('Users', array('action'=>'chtype'));?>/"+data,
+                     function (data){
+                         if(data.done == 'true'){
+                             fulldata();
+                         }else{
+                         $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
+                             $('#error').show(150);
+                         }
+                     }
+            );
+        });
+        $('#userDataTable tbody').on('click', '.chpublic', function () {
+            var data = $(this).attr('rel');
+            $.post(
+                    "<?php echo $this->url('Users', array('action'=>'chpublic'));?>/"+data,
                      function (data){
                          if(data.done == 'true'){
                              fulldata();
