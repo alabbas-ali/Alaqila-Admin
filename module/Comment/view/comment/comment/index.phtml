@@ -21,7 +21,15 @@
                                 <div class="box-header">
                                     <div id="error" style="display: none" class="callout callout-danger">
                                     </div>
-                                    
+                                    <span>Type: </span>
+                                    <select id='type'>
+                                        <option value=''></option>
+                                        <option value='news'>news</option>
+                                        <option value='audio'>audio</option>
+                                        <option value='photo'>photo</option>
+                                        <option value='video'>video</option>
+                                        <option value='broadcast'>broadcast</option>
+                                    </select>
                                     <!--<p>
                                         <a href="<?php echo $this->url('Comment', array('action'=>'add'));?>">Add new Comment</a>
                                     </p>-->
@@ -36,6 +44,7 @@
                                                 <th><?php echo $this->translate('tableuser');?></th>
                                                 <th><?php echo $this->translate('tabledate');?></th>
                                                 <th>auther</th>
+                                                <th><?php echo $this->translate('tabletype');?></th>
                                                 <th><?php echo $this->translate('tablestatus');?></th>
                                                 <th><?php echo $this->translate('tableoptions');?></th>
                                             </tr>
@@ -92,10 +101,17 @@
                                 "data": "userid",
                                 "visible": false,
                                 "render": function ( data, type, full, meta ) {
-                                            return data;
+                                            return '-'+data+'-';
                                         }
                                     },{
                                 "targets": 5,
+                                "data": "type",
+                                "visible": true,
+                                "render": function ( data, type, full, meta ) {
+                                            return data;
+                                        }
+                                    },{
+                                "targets": 6,
                                 "data": "active",
                                 "render": function ( data, type, full, meta ) {
                                             var activeicon='fa fa-close';
@@ -107,7 +123,7 @@
                                             return "<a rel='" + full.id + "' class='btn btn-xs chstatus' data-toggle='tooltip' data-placement='top' title='"+ activemsg +"'><i class='"+ activeicon +"'></i></a>";
                                         }
                                     },{
-                                "targets": 6,
+                                "targets": 7,
                                 "data": "id",
                                 "render": function ( data, type, full, meta ) {
                                     return "<a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>\n\
@@ -115,10 +131,17 @@
                                 }
                 }]
                 ,initComplete: function () {
-                    var authorColumn = this.api().columns(3);
+                    var authorColumn = this.api().columns(4);
                     $('#auther').on( 'change', function () {
                         authorColumn
-                            .columns( 3 )
+                            .columns( 4 )
+                            .search( this.value )
+                            .draw();
+                    });
+                    var typeColumn = this.api().columns(5);
+                    $('#type').on( 'change', function () {
+                        authorColumn
+                            .columns( 5 )
                             .search( this.value )
                             .draw();
                     });
@@ -133,7 +156,7 @@
             $("<span>User: </span>").appendTo('.box-header' );
             var select = $("<select id='auther'><option value=''></option></select>").appendTo('.box-header' );
                 $.each(result.data, function(index, element) {
-                select.append( '<option value="'+element.id+'">'+element.displayName+'</option>' )    
+                select.append( '<option value="-'+element.id+'-">'+element.displayName+'</option>' )    
                 });
             });
         <?php

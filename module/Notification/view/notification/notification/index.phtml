@@ -83,7 +83,7 @@
                                 "data": "user_id",
                                 "visible": false,
                                 "render": function ( data, type, full, meta ) {
-                                            return data;
+                                            return '-'+data+'-';
                                         }
                                     },{
                                 "targets": 4,
@@ -111,7 +111,7 @@
             $("<span>User: </span>").appendTo('.box-header' );
             var select = $("<select id='auther'><option value=''></option></select>").appendTo('.box-header' );
                 $.each(result.data, function(index, element) {
-                select.append( '<option value="'+element.id+'">'+element.displayName+'</option>' )    
+                select.append( '<option value="-'+element.id+'-">'+element.displayName+'</option>' )    
                 });
             });
         <?php
