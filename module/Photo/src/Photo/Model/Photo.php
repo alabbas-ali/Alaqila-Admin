@@ -250,7 +250,7 @@ class Photo implements InputFilterAwareInterface {
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 1500,
+                            'max' => 4000,
                         ),
                     ),
                 ),
@@ -268,7 +268,7 @@ class Photo implements InputFilterAwareInterface {
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 1500,
+                            'max' => 4000,
                         ),
                     ),
                 ),

@@ -130,7 +130,7 @@ $this->headTitle($title);
             $("#parentName").val(parent);
         });
         
-        var content_max = 1500;
+        var content_max = 4000;
         $('#content_feedback').html('<?php echo $this->translate('upTo');?> ,' + content_max + ' <?php echo $this->translate('remaining');?>');
 
         $('#content').keyup(function() {
@@ -139,7 +139,7 @@ $this->headTitle($title);
             $('#content_feedback').html('<?php echo $this->translate('upTo');?> ,'+ text_remaining + ' <?php echo $this->translate('remaining');?>');
         });
         
-        var arcontent_max = 1500;
+        var arcontent_max = 4000;
         $('#arcontent_feedback').html('<?php echo $this->translate('upTo');?> ,' + arcontent_max + ' <?php echo $this->translate('remaining');?>');
 
         $('#arcontent').keyup(function() {

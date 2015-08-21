@@ -40,7 +40,7 @@ class CommentController extends AbstractActionController {
         $user=$this->zfcUserAuthentication()->getIdentity();
         if (!$user->isAdmin) {
             $qb = $this->getEntityManager()->createQueryBuilder();
-            $qb->select('c.id','c.title','c.content','c.username','c.type','c.type_id','c.comment_date','c.active')
+            $qb->select('c.id','c.content','c.username','c.type','c.type_id','c.comment_date','c.active')
                 ->from('Comment\Model\Comment', 'c')
                 ->where("c.type_id in (select news.id from News\Model\News news where news.user='".$user->id."') and c.type='news'")
                 ->orWhere("c.type_id in (select audio.id from Audio\Model\Audio audio where audio.user='".$user->id."') and c.type='audio'")
