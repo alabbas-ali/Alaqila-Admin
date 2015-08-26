@@ -38,7 +38,7 @@ class NotificationController extends AbstractActionController {
     public function getAllNotificationAction(){
         $user=$this->zfcUserAuthentication()->getIdentity();
         if (!$user->isAdmin) {
-            $notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_id' => $user) , array('id' => 'DESC'));
+            $notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_id' => $user) , array('id' => 'DESC'), 5, 0);
             //var_dump($notifications);die;
         } else {
             //$notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_type' => '1') , array('id' => 'DESC'));
@@ -46,7 +46,8 @@ class NotificationController extends AbstractActionController {
             $qb->select('n.id','n.type','n.type_id','n.notification_date','n.user_type','n.user_id','n.message')
                 ->from('Notification\Model\Notification', 'n')
                 ->where("n.user_type='1'")
-                ->orWhere("n.user_id='".$user->id."'");
+                ->orWhere("n.user_id='".$user->id."'")
+                ->setMaxResults(5);
 
             $query = $qb->getQuery();
             $notifications=$qb->getQuery()->getResult();
