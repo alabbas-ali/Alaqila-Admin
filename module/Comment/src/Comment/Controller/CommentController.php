@@ -138,7 +138,8 @@ class CommentController extends AbstractActionController {
                     $typeData=$typerec->getArrayCopy();
                     $userid=$typerec->user->id;
                     $notification = new Notification();
-                    $notData=array('type'=>'comment','type_id'=>$id,'user_id'=>$userid);
+                    $message='قام '.$data['username'].' بإضافة تعليق جديد';
+                    $notData=array('type'=>'comment','type_id'=>$id,'user_id'=>$userid,'message'=>$message);
                     $notification->exchangeArray($notData);
                     $this->getEntityManager()->persist($notification);
                     $this->getEntityManager()->flush();

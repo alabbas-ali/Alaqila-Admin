@@ -83,10 +83,10 @@ class User extends \ZfcUserOver\Model\User implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inputFilter', 'id', 'username', 'email', 'displayName', 'photo', 'password', 'state', 'isAdmin', 'facebook', 'instagram', 'twitter', 'livestream', 'content', 'arcontent', 'subtitle', 'subartitle');
+            return array('__isInitialized__', 'inputFilter', 'id', 'username', 'email', 'displayName', 'photo', 'password', 'state', 'isAdmin', 'isPublic', 'facebook', 'instagram', 'twitter', 'livestream', 'content', 'arcontent', 'subtitle', 'subartitle');
         }
 
-        return array('__isInitialized__', 'inputFilter', 'id', 'username', 'email', 'displayName', 'photo', 'password', 'state', 'isAdmin', 'facebook', 'instagram', 'twitter', 'livestream', 'content', 'arcontent', 'subtitle', 'subartitle');
+        return array('__isInitialized__', 'inputFilter', 'id', 'username', 'email', 'displayName', 'photo', 'password', 'state', 'isAdmin', 'isPublic', 'facebook', 'instagram', 'twitter', 'livestream', 'content', 'arcontent', 'subtitle', 'subartitle');
     }
 
     /**
@@ -370,6 +370,28 @@ class User extends \ZfcUserOver\Model\User implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsAdmin', array($isAdmin));
 
         return parent::setIsAdmin($isAdmin);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIsPublic()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsPublic', array());
+
+        return parent::getIsPublic();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsPublic($isPublic)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsPublic', array($isPublic));
+
+        return parent::setIsPublic($isPublic);
     }
 
     /**

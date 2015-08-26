@@ -246,7 +246,7 @@
                 $('#notification_list').before('<li class="header">You have '+data.num+' notifications</li>');
     var alldata=data.data;  
     for (var key in alldata) {
-                    $('#notification_menu').append('<li><a href="<?php echo $this->url('Notification', array('action' => 'go')) ?>'+alldata[key]['id']+'"><i class="fa '+alldata[key]['style']+'"></i> '+alldata[key]['text']+'</a></li>')
+                    $('#notification_menu').append('<li><a href="<?php echo $this->url('Notification', array('action' => 'go')) ?>'+alldata[key]['id']+'"><i class="fa '+alldata[key]['style']+'"></i> '+alldata[key]['message']+'</a></li>')
                 }
             });
         </script>

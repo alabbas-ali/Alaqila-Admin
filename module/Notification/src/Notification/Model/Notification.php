@@ -59,6 +59,11 @@ class Notification implements InputFilterAwareInterface {
     /**
      * @ORM\Column(type="string")
      */
+    protected $message;
+
+    /**
+     * @ORM\Column(type="string")
+     */
     protected $notification_date;
 
     /**  @ORM\Column(type="boolean") */
@@ -86,6 +91,7 @@ class Notification implements InputFilterAwareInterface {
         $this->type_id = (isset($data['type_id'])) ? $data['type_id'] : null;
         $this->user_type = (isset($data['user_type'])) ? $data['user_type'] : '0';
         $this->user_id = (isset($data['user_id'])) ? $data['user_id'] : '0';
+        $this->message = (isset($data['message'])) ? $data['message'] : '';
         $this->notification_date = (isset($data['notification_date'])) ? $data['notification_date'] : date('Y-m-d H:i:s');
         $this->seen = (isset($data['seen'])) ? $data['seen'] : '0';
     }

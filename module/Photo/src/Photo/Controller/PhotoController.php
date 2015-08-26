@@ -246,7 +246,8 @@ class PhotoController extends AbstractActionController {
                 $this->getEntityManager()->flush();
                 $id=$photo->getId();
                 $notification = new Notification();
-                $notData=array('type'=>'photo','type_id'=>$id,'user_type'=>'1');
+                $message='قام '.$data['user']->displayName.' بإضافة صورة جديدة';
+                $notData=array('type'=>'photo','type_id'=>$id,'user_type'=>'1','message'=>$message);
                 $notification->exchangeArray($notData);
                 $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();

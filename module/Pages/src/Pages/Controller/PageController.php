@@ -136,7 +136,9 @@ class PageController extends AbstractActionController {
                 $this->getEntityManager()->flush();
                 $id=$page->getId();
                 $notification = new Notification();
-                $notData=array('type'=>'page','type_id'=>$id,'user_type'=>'1');
+                $user=$this->zfcUserAuthentication()->getIdentity();
+                $message='قام '.$user->displayName.' بإضافة صفحة جديدة';
+                $notData=array('type'=>'page','type_id'=>$id,'user_type'=>'1','message'=>$message);
                 $notification->exchangeArray($notData);
                 $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();

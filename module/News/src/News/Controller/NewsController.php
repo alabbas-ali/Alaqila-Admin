@@ -258,11 +258,13 @@ class NewsController extends AbstractActionController {
                 $news->exchangeArray($data);
                 $news->active=1;
                 
+                
                 $this->getEntityManager()->persist($news);
                 $this->getEntityManager()->flush();
                 $id=$news->getId();
                 $notification = new Notification();
-                $notData=array('type'=>'news','type_id'=>$id,'user_type'=>'1');
+                $message='قام '.$data['user']->displayName.' بإضافة خبر جديد';
+                $notData=array('type'=>'news','type_id'=>$id,'user_type'=>'1','message'=>$message);
                 $notification->exchangeArray($notData);
                 $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();
