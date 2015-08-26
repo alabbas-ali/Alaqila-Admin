@@ -115,7 +115,7 @@ class VideoForm extends Form {
                 'class' => 'form-control',
                 'placeholder' => 'Content',
                 'id' => 'content',
-                'maxlength'=> '1500',
+                'maxlength'=> '4000',
                 'required' => 'required',
             ),
         ));
@@ -127,7 +127,7 @@ class VideoForm extends Form {
                 'class' => 'form-control',
                 'placeholder' => 'Content',
                 'id' => 'arcontent',
-                'maxlength'=> '1500',
+                'maxlength'=> '4000',
                 'required' => 'required',
                 'dir' => 'rtl',
             ),

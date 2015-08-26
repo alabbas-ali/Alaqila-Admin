@@ -339,7 +339,7 @@ msgid "arabicTitleVal"
 msgstr "Up to 60 arabic letters, numbers and 
 
 msgid "upTo"
-msgstr "Up to 1500 letters"
+msgstr "Up to 4000 letters"
 
 msgid "remaining"
 msgstr "characters remaining"

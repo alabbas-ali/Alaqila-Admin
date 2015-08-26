@@ -260,7 +260,7 @@ msgid "arabicTitleVal"
 msgstr "Allowed up to 60 Arabic letters, numbers and characters"
 
 msgid "upTo"
-msgstr "Allowed up to 1500 characters"
+msgstr "Allowed up to 4000 characters"
 
 msgid "remaining"
 msgstr "remaining  "

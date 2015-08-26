@@ -263,7 +263,7 @@ class Audio implements InputFilterAwareInterface {
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 1500,
+                            'max' => 4000,
                         ),
                     ),
                 ),
@@ -281,7 +281,7 @@ class Audio implements InputFilterAwareInterface {
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 1500,
+                            'max' => 4000,
                         ),
                     ),
                 ),
