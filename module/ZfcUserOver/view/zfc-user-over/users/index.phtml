@@ -163,11 +163,19 @@
         
         $('#userDataTable tbody').on('click', '.chtype', function () {
             var data = $(this).attr('rel');
+            var el = this;
             $.post(
                     "<?php echo $this->url('Users', array('action'=>'chtype'));?>/"+data,
                      function (data){
                          if(data.done == 'true'){
-                             fulldata();
+                             //fulldata();
+                             if( $(el).attr('title') == "Set As Admin"){
+                             	$(el).attr('title', "Set As User");
+                             	$(el).find(".fa.fa-close").attr('class','fa fa-check');
+                             }else{
+                             	$(el).attr('title', "Set As Admin");
+                             	$(el).find(".fa.fa-check").attr('class','fa fa-close');
+                             }
                          }else{
                          $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
                              $('#error').show(150);
@@ -177,11 +185,19 @@
         });
         $('#userDataTable tbody').on('click', '.chpublic', function () {
             var data = $(this).attr('rel');
+            var el = this;
             $.post(
                     "<?php echo $this->url('Users', array('action'=>'chpublic'));?>/"+data,
                      function (data){
                          if(data.done == 'true'){
-                             fulldata();
+                             //fulldata();
+                             if( $(el).attr('title') == "Set As Public"){
+                             	$(el).attr('title', "Set As Private");
+                             	$(el).find(".fa.fa-close").attr('class','fa fa-check');
+                             }else{
+                             	$(el).attr('title', "Set As Public");
+                             	$(el).find(".fa.fa-check").attr('class','fa fa-close');
+                             }
                          }else{
                          $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
                              $('#error').show(150);
@@ -191,11 +207,19 @@
         });
         $('#userDataTable tbody').on('click', '.chtypesv', function () {
             var data = $(this).attr('rel');
+            var el = this;
             $.post(
                     "<?php echo $this->url('Users', array('action'=>'chtypesv'));?>/"+data,
                      function (data){
                          if(data.done == 'true'){
-                             fulldata();
+                             //fulldata();
+                             if( $(el).attr('title') == "Set As Supervisor"){
+                             	$(el).attr('title', "Set As User");
+                             	$(el).find(".fa.fa-close").attr('class','fa fa-check');
+                             }else{
+                             	$(el).attr('title', "Set As Supervisor");
+                             	$(el).find(".fa.fa-check").attr('class','fa fa-close');
+                             }
                          }else{
                          $('#error').html('<h4>Error In Submit!</h4><p>'+data.message+'</p>');
                              $('#error').show(150);
