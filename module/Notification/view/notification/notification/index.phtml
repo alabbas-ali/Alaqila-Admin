@@ -89,7 +89,8 @@
                                 "targets": 4,
                                 "data": "id",
                                 "render": function ( data, type, full, meta ) {
-                                    return "<a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>";
+                                    return "<a href='<?php echo $this->url('Notification', array('action' => 'go')) ?>"+ data +"' class='btn btn-xs' data-toggle='tooltip' data-placement='top'><i class='fa fa-link'></i></a>\n\
+                                            <a rel='"+ data +"' class='btn btn-xs delete' data-toggle='tooltip' data-placement='top' title='Delete'><i class='fa fa-trash'></i></a>";
                                 }
                 }]
                 ,initComplete: function () {

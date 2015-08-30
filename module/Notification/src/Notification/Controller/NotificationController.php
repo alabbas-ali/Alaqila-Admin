@@ -38,15 +38,16 @@ class NotificationController extends AbstractActionController {
     public function getAllNotificationAction(){
         $user=$this->zfcUserAuthentication()->getIdentity();
         if (!$user->isAdmin) {
-            $notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_id' => $user) , array('id' => 'DESC'));
+            $notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_id' => $user) , array('id' => 'DESC'), 5, 0);
             //var_dump($notifications);die;
         } else {
             //$notifications = $this->getEntityManager()->getRepository('Notification\Model\Notification')->findby(array('user_type' => '1') , array('id' => 'DESC'));
             $qb = $this->getEntityManager()->createQueryBuilder();
-            $qb->select('n.id','n.type','n.type_id','n.notification_date','n.user_type','n.user_id')
+            $qb->select('n.id','n.type','n.type_id','n.notification_date','n.user_type','n.user_id','n.message')
                 ->from('Notification\Model\Notification', 'n')
                 ->where("n.user_type='1'")
-                ->orWhere("n.user_id='".$user->id."'");
+                ->orWhere("n.user_id='".$user->id."'")
+                ->setMaxResults(5);
 
             $query = $qb->getQuery();
             $notifications=$qb->getQuery()->getResult();
@@ -59,35 +60,29 @@ class NotificationController extends AbstractActionController {
         foreach ($notifications as $notif) {
             if(is_object($notif))
                 $notif=$notif->getArrayCopy();
-            
+                
             switch ($notif['type']){
                 case 'news':
                     $notif['style']='fa-newspaper-o text-aqua';
-                    $notif['text']='تمت اضافة خبر جديد';
+                    
                     break;
                 case 'video':
                     $notif['style']='fa-video-camera text-red';
-                    $notif['text']='تمت اضافة فيديو جديد';
                     break;
                 case 'audio':
                     $notif['style']='fa-microphone text-black';
-                    $notif['text']='تمت اضافة تسجيل جديد';
                     break;
                 case 'photo':
                     $notif['style']='fa-camera text-orange';
-                    $notif['text']='تمت اضافة صورة جديدة';
                     break;
                 case 'comment':
                     $notif['style']='fa-comment text-green';
-                    $notif['text']='تمت اضافة تعليق جديد';
                     break;
                 case 'page':
                     $notif['style']='fa-file-text text-yellow';
-                    $notif['text']='تمت اضافة صفحة جديد';
                     break;
                 default :
                     $notif['style']='fa-users text-aqua';
-                    $notif['text']='';
                     break;
             }
             $data[] = $notif;

@@ -248,7 +248,8 @@ class AudioController extends AbstractActionController {
                 $this->getEntityManager()->flush();
                 $id=$audio->getId();
                 $notification = new Notification();
-                $notData=array('type'=>'audio','type_id'=>$id,'user_type'=>'1');
+                $message='قام '.$data['user']->displayName.' بإضافة صوت جديد';
+                $notData=array('type'=>'audio','type_id'=>$id,'user_type'=>'1','message'=>$message);
                 $notification->exchangeArray($notData);
                 $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();
