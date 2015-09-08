@@ -264,3 +264,9 @@ msgstr "Allowed up to 4000 characters"
 
 msgid "remaining"
 msgstr "remaining  "
+
+msgid "tableissupervisor"
+msgstr "Is Supervisor"
+
+msgid "tableispublic"
+msgstr "Is Public"
