@@ -18,18 +18,18 @@ return array(
                 'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
                 'params' => array(
                     /*'host'     => '144.76.234.101', */
-                    'host'     => 'alaqila.tv',
+                    /*'host'     => 'alaqila.tv',
                     'port'     => '3306',
                     'user'     => 'alaq365_zend',
                     'password' => 'no1stand@last',
-                    'dbname'   => 'alaq365_zend', 
+                    'dbname'   => 'alaq365_zend',*/ 
                     'encoding' => "UTF-8",
                     'charset' => "utf8" ,
-                    /*'host'     => 'localhost',
+                    'host'     => 'localhost',
                     'port'     => '3306',
                     'user'     => 'root',
                     'password' => '',
-                    'dbname'   => 'zf2tutorial', */
+                    'dbname'   => 'zf2tutorial', 
                 )
             )
         )

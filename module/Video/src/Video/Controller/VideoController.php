@@ -21,53 +21,123 @@ use Video\Model\Video;
 use Notification\Model\Notification;
 use Video\Form\VideoForm;
 use Visit\Model\Visit;
+use Doctrine\ORM\Query;
 
-class VideoController extends AbstractActionController {
+class VideoController extends AbstractActionController
+{
 
     protected $entityManager;
 
-    public function getEntityManager() {
+    public function getEntityManager()
+    {
         if (null === $this->entityManager) {
             $this->entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         }
         return $this->entityManager;
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         return new ViewModel();
     }
 
-    public function getAllAction() {
-        $user=$this->zfcUserAuthentication()->getIdentity();
+    public function getAllAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
         if (!$user->isAdmin) {
-            $videos = $this->getEntityManager()->getRepository('Video\Model\Video')->findby(array('user' => $user) , array('id' => 'DESC'));
+            $videos = $this->getEntityManager()->getRepository('Video\Model\Video')->findby(array('user' => $user), array('id' => 'DESC'));
         } else {
             $videos = $this->getEntityManager()->getRepository('Video\Model\Video')->findAll();
         }
-        
+
         $data = array();
         //$i=0;
         foreach ($videos as $video) {
-            $item=$video->getArrayCopy();
-            $type='video';
+            $item = $video->getArrayCopy();
+            $type = 'video';
             $visits = $this->getEntityManager()->getRepository('Visit\Model\Visit')->findBy(array('type' => $type, 'type_id' => $item['id']));
-            $item['visits']=count($visits);
+            $item['visits'] = count($visits);
             $data[] = $item;
         }
         return new JsonModel(array("data" => $data));
     }
-    
-    public function getAllActiveAction() {
+
+    public function getAllPagesAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        if(isset($_GET['order'])){
+            echo "<pre>";print_r($_GET['order']);
+            echo "<br>file:".__File__ ."<br>line:".__Line__."<br>class:".__Class__;die;
+            $orderBy = array();
+            $dtColumns = self::pluck( $columns, 'dt' );
+            for ( $i=0, $ien=count($_GET['order']) ; $i<$ien ; $i++ ) {
+                // Convert the column index into the column data property
+                $columnIdx = intval($request['order'][$i]['column']);
+                $requestColumn = $request['columns'][$columnIdx];
+                $columnIdx = array_search( $requestColumn['data'], $dtColumns );
+                $column = $columns[ $columnIdx ];
+                if ( $requestColumn['orderable'] == 'true' ) {
+                    $dir = $request['order'][$i]['dir'] === 'asc' ?
+                        'ASC' :
+                        'DESC';
+                    $orderBy[] = '`'.$column['db'].'` '.$dir;
+                }
+            }
+            $order = 'ORDER BY '.implode(', ', $orderBy);
+        }
+        $draw = isset ($_GET['draw']) ? intval($_GET['draw']) : 0;
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 0;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 10;
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select(array('table'))
+            ->from('Video\Model\Video', 'table')
+            ->orderBy('table.id', 'DESC');
+            
+        if (!$user->isAdmin)
+            $qb->where("table.user='$user->id'");
+
+
+        $all_count = count($qb->getQuery()->getResult());
+
+        $qb->setFirstResult($start);
+        $qb->setMaxResults($length);
+        //var_dump($qb->getQuery());die;
+        $videos = $qb->getQuery()->getResult();
+        $data = array();
+        //$i=0;
+        foreach ($videos as $video) {
+            $item = $video->getArrayCopy();
+            $type = 'video';
+            $visits = $this->getEntityManager()->getRepository('Visit\Model\Visit')->findBy(array('type' => $type, 'type_id' => $item['id']));
+            $item['visits'] = count($visits);
+            $data[] = $item;
+        }
+
+        $arrayff = [
+            "draw" => $draw,
+            "recordsTotal" => $all_count,
+            "recordsFiltered" => $all_count,
+            "data" => $data
+        ];
+        return new JsonModel($arrayff);
+        die;
+    }
+
+    public function getAllActiveAction()
+    {
         $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
-                ->findBy(array('active' => '1'), array('id' => 'DESC'), 16 ,6);
+            ->findBy(array('active' => '1'), array('id' => 'DESC'), 16, 6);
         $data = array();
         foreach ($videos as $video) {
             $data[] = $video->getArrayCopy();
         }
         return new JsonModel($data);
     }
-    
-    public function getPublicAction() {
+
+    public function getPublicAction()
+    {
 //        $num = (int) $this->params()->fromRoute('id', 0);
 //        $qb = $this->getEntityManager()->createQueryBuilder();
 //
@@ -89,17 +159,18 @@ class VideoController extends AbstractActionController {
 //            
 //        }
 //        return new JsonModel($data);
-        
+
         $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
-                ->findBy(array('active' => '1'), array('id' => 'DESC'), 6 ,0);
+            ->findBy(array('active' => '1'), array('id' => 'DESC'), 6, 0);
         $data = array();
         foreach ($videos as $video) {
             $data[] = $video->getArrayCopy();
         }
         return new JsonModel($data);
     }
-    
-    public function getHomePublicAction() {
+
+    public function getHomePublicAction()
+    {
 //        $num = (int) $this->params()->fromRoute('id', 0);
 //        $qb = $this->getEntityManager()->createQueryBuilder();
 //
@@ -122,59 +193,63 @@ class VideoController extends AbstractActionController {
 //        }
 //        return new JsonModel($data);
         $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
-                ->findBy(array('active' => '1'), array('id' => 'DESC'), 6 ,0);
+            ->findBy(array('active' => '1'), array('id' => 'DESC'), 6, 0);
         $data = array();
         foreach ($videos as $video) {
             $data[] = $video->getArrayCopy();
         }
         return new JsonModel($data);
     }
-    
-    public function getByIDAction() {
-        $id = (int) $this->params()->fromRoute('id', 0);
+
+    public function getByIDAction()
+    {
+        $id = (int)$this->params()->fromRoute('id', 0);
         $visit = new Visit();
-        $visit->ip_address=$_SERVER['REMOTE_ADDR'];
-        $visit->type='video';
-        $visit->type_id=$id;
-        $visit->visit_date=date('Y-m-d H:i:s');
+        $visit->ip_address = $_SERVER['REMOTE_ADDR'];
+        $visit->type = 'video';
+        $visit->type_id = $id;
+        $visit->visit_date = date('Y-m-d H:i:s');
         $this->getEntityManager()->persist($visit);
         $this->getEntityManager()->flush();
-                
+
         $video = $this->getEntityManager()->find('Video\Model\Video', $id);
         $data = array();
         $data[] = $video->getArrayCopy();
         return new JsonModel($data);
     }
-    
-    public function getByUserAction(){
-        $userID = (int) $this->params()->fromRoute('id', 0);
+
+    public function getByUserAction()
+    {
+        $userID = (int)$this->params()->fromRoute('id', 0);
         $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $userID);
         $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
-                ->findby(array('active' => 1 , 'user' => $user), array('id' => 'DESC') , 6 ,0);
+            ->findby(array('active' => 1, 'user' => $user), array('id' => 'DESC'), 6, 0);
         $data = array();
         foreach ($videos as $video) {
             $data[] = $video->getArrayCopy();
         }
         return new JsonModel($data);
     }
-    
-    public function getUserPublicAction(){
-        $userID = (int) $this->params()->fromRoute('id', 0);
+
+    public function getUserPublicAction()
+    {
+        $userID = (int)$this->params()->fromRoute('id', 0);
         $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $userID);
         $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
-                ->findby(array('active' => 1 , 'user' => $user), array('id' => 'DESC'), 6 , 0);
+            ->findby(array('active' => 1, 'user' => $user), array('id' => 'DESC'), 6, 0);
         $data = array();
         foreach ($videos as $video) {
             $data[] = $video->getArrayCopy();
         }
         return new JsonModel($data);
     }
-    
-    public function getAllUserActiveAction(){
-        $userID = (int) $this->params()->fromRoute('id', 0);
+
+    public function getAllUserActiveAction()
+    {
+        $userID = (int)$this->params()->fromRoute('id', 0);
         $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $userID);
         $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
-                ->findby(array('active' => 1 , 'user' => $user), array('id' => 'DESC'), 16 , 6);
+            ->findby(array('active' => 1, 'user' => $user), array('id' => 'DESC'), 16, 6);
         $data = array();
         foreach ($videos as $video) {
             $data[] = $video->getArrayCopy();
@@ -201,8 +276,9 @@ class VideoController extends AbstractActionController {
 //        return new JsonModel(array("data" => $data));
 //    }
 
-    public function addAction() {
-        $form = new VideoForm($this->getEntityManager(),$this->zfcUserAuthentication()->getIdentity()->getId());
+    public function addAction()
+    {
+        $form = new VideoForm($this->getEntityManager(), $this->zfcUserAuthentication()->getIdentity()->getId());
         $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();
@@ -213,44 +289,44 @@ class VideoController extends AbstractActionController {
 
             if ($form->isValid()) {
                 $data = $form->getData();
-                $userid=$this->zfcUserAuthentication()->getIdentity();
-                if(!$userid->isAdmin){
+                $userid = $this->zfcUserAuthentication()->getIdentity();
+                if (!$userid->isAdmin) {
                     $repository = $this->getEntityManager()->getRepository('Countries\Model\Country');
                     $querybuilder = $repository->createQueryBuilder('c');
                     $querybuilder->select('c')
-                            ->leftJoin(
-                                    'ZfcUserOver\Model\RoleAssignment',
-                                    'r',
-                                    \Doctrine\ORM\Query\Expr\Join::WITH,
-                                    "r.instanceid = c.id"
-                            )
-                            ->where("r.userid = $userid->id AND r.context='country'");
-                    $countries=$querybuilder->getQuery()->getResult();
-                    if(count($countries)<=0){
+                        ->leftJoin(
+                            'ZfcUserOver\Model\RoleAssignment',
+                            'r',
+                            \Doctrine\ORM\Query\Expr\Join::WITH,
+                            "r.instanceid = c.id"
+                        )
+                        ->where("r.userid = $userid->id AND r.context='country'");
+                    $countries = $querybuilder->getQuery()->getResult();
+                    if (count($countries) <= 0) {
                         return array('form' => $form);
                     }
-                }else{
+                } else {
                     $countries = $this->getEntityManager()->getRepository('Countries\Model\Country')->findby(array('id' => '1'));
                 }
                 $data['country'] = $countries[0];
-        
+
                 /*$data['country'] = $this->getEntityManager()->getRepository('Countries\Model\Country')
                         ->findby(array('id' => $data['country']));
-                $data['country'] = $data['country'][0];            */    
-                
-                
+                $data['country'] = $data['country'][0];            */
+
+
                 $data['user'] = $this->getEntityManager()->getRepository('ZfcUserOver\Model\User')
-                        ->findby(array('id' => $userid));
-                $data['user'] = $data['user'][0];                
+                    ->findby(array('id' => $userid));
+                $data['user'] = $data['user'][0];
                 $video->exchangeArray($data);
-                $video->active=1;
-                
+                $video->active = 1;
+
                 $this->getEntityManager()->persist($video);
                 $this->getEntityManager()->flush();
-                $id=$video->getId();
+                $id = $video->getId();
                 $notification = new Notification();
-                $message='قام '.$data['user']->displayName.' بإضافة فيديو جديد';
-                $notData=array('type'=>'video','type_id'=>$id,'user_type'=>'1','message'=>$message);
+                $message = 'قام ' . $data['user']->displayName . ' بإضافة فيديو جديد';
+                $notData = array('type' => 'video', 'type_id' => $id, 'user_type' => '1', 'message' => $message);
                 $notification->exchangeArray($notData);
                 $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();
@@ -262,26 +338,27 @@ class VideoController extends AbstractActionController {
         return array('form' => $form);
     }
 
-    public function editAction() {
-        $id = (int) $this->params()->fromRoute('id', 0);
+    public function editAction()
+    {
+        $id = (int)$this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('Video', array(
-                        'action' => 'add'
+                'action' => 'add'
             ));
         }
 
         $video = $this->getEntityManager()->find('Video\Model\Video', $id);
         //echo '<pre>';print_r($video);die;
-        $video->country=$video->country->id;
-        $video->user=$video->user->id;
-        
+        $video->country = $video->country->id;
+        $video->user = $video->user->id;
+
         if (!$video) {
             return $this->redirect()->toRoute('Video', array(
-                        'action' => 'index'
+                'action' => 'index'
             ));
         }
 
-        $form = new VideoForm($this->getEntityManager(),$this->zfcUserAuthentication()->getIdentity()->getId());
+        $form = new VideoForm($this->getEntityManager(), $this->zfcUserAuthentication()->getIdentity()->getId());
         $form->bind($video);
         $form->get('submit')->setAttribute('value', 'Edit');
 
@@ -291,8 +368,8 @@ class VideoController extends AbstractActionController {
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $video->country=$this->getEntityManager()->find('Countries\Model\Country', $video->country);
-                $video->user=$this->getEntityManager()->find('ZfcUserOver\Model\User', $video->user);
+                $video->country = $this->getEntityManager()->find('Countries\Model\Country', $video->country);
+                $video->user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $video->user);
                 //echo '<pre>';print_r($video->country);die;
                 $this->getEntityManager()->flush();
 
@@ -307,12 +384,13 @@ class VideoController extends AbstractActionController {
         );
     }
 
-    public function deleteAction() {
-        $id = (int) $this->params()->fromRoute('id', 0);
+    public function deleteAction()
+    {
+        $id = (int)$this->params()->fromRoute('id', 0);
         if (!$id) {
             return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Delete This'));
         }
-        
+
         $video = $this->getEntityManager()->find('Video\Model\Video', $id);
         if ($video) {
             $this->getEntityManager()->remove($video);
@@ -321,15 +399,17 @@ class VideoController extends AbstractActionController {
         }
         return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Delete This'));
     }
-    public function chstatusAction() {
-        $id = (int) $this->params()->fromRoute('id', 0);
+
+    public function chstatusAction()
+    {
+        $id = (int)$this->params()->fromRoute('id', 0);
         if (!$id) {
             return new JsonModel(array("done" => 'false', 'message' => 'Sorry But Can not Edit This'));
         }
-        
+
         $video = $this->getEntityManager()->find('Video\Model\Video', $id);
         if ($video) {
-            $video->active=!$video->active;
+            $video->active = !$video->active;
             $this->getEntityManager()->flush();
             return new JsonModel(array("done" => 'true', 'message' => 'Video Has been Edited'));
         }
