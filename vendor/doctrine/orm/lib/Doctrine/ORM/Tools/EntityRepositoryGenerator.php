@@ -96,12 +96,11 @@ class <className> extends EntityRepository
         $dir = dirname($path);
 
         if ( ! is_dir($dir)) {
-            mkdir($dir, 0775, true);
+            mkdir($dir, 0777, true);
         }
 
         if ( ! file_exists($path)) {
             file_put_contents($path, $code);
-            chmod($path, 0664);
         }
     }
 }

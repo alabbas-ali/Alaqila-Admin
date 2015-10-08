@@ -892,8 +892,6 @@ class SqlWalker implements TreeWalker
             }
         }
 
-        $targetTableJoin = null;
-
         // This condition is not checking ClassMetadata::MANY_TO_ONE, because by definition it cannot
         // be the owning side and previously we ensured that $assoc is always the owning side of the associations.
         // The owning side is necessary at this point because only it contains the JoinColumn information.
@@ -928,10 +926,7 @@ class SqlWalker implements TreeWalker
                     $conditions[] = $filterExpr;
                 }
 
-                $targetTableJoin = array(
-                    'table' => $targetTableName . ' ' . $targetTableAlias,
-                    'condition' => implode(' AND ', $conditions),
-                );
+                $sql .= $targetTableName . ' ' . $targetTableAlias . ' ON ' . implode(' AND ', $conditions);
                 break;
 
             case ($assoc['type'] == ClassMetadata::MANY_TO_MANY):
@@ -983,30 +978,20 @@ class SqlWalker implements TreeWalker
                     $conditions[] = $filterExpr;
                 }
 
-                $targetTableJoin = array(
-                    'table' => $targetTableName . ' ' . $targetTableAlias,
-                    'condition' => implode(' AND ', $conditions),
-                );
+                $sql .= $targetTableName . ' ' . $targetTableAlias . ' ON ' . implode(' AND ', $conditions);
                 break;
         }
 
         // Handle WITH clause
-        $withCondition = (null === $condExpr) ? '' : ('(' . $this->walkConditionalExpression($condExpr) . ')');
-
-        if ($targetClass->isInheritanceTypeJoined()) {
-            $ctiJoins = $this->_generateClassTableInheritanceJoins($targetClass, $joinedDqlAlias);
-            // If we have WITH condition, we need to build nested joins for target class table and cti joins
-            if ($withCondition) {
-                $sql .= '(' . $targetTableJoin['table'] . $ctiJoins . ') ON ' . $targetTableJoin['condition'];
-            } else {
-                $sql .= $targetTableJoin['table'] . ' ON ' . $targetTableJoin['condition'] . $ctiJoins;
-            }
-        } else {
-            $sql .= $targetTableJoin['table'] . ' ON ' . $targetTableJoin['condition'];
+        if ($condExpr !== null) {
+            // Phase 2 AST optimization: Skip processing of ConditionalExpression
+            // if only one ConditionalTerm is defined
+            $sql .= ' AND (' . $this->walkConditionalExpression($condExpr) . ')';
         }
 
-        if ($withCondition) {
-            $sql .= ' AND ' . $withCondition;
+        // FIXME: these should either be nested or all forced to be left joins (DDC-XXX)
+        if ($targetClass->isInheritanceTypeJoined()) {
+            $sql .= $this->_generateClassTableInheritanceJoins($targetClass, $joinedDqlAlias);
         }
 
         // Apply the indexes

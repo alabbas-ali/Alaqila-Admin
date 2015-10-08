@@ -29,7 +29,7 @@ namespace Doctrine\Common\Cache;
 interface FlushableCache
 {
     /**
-     * Flushes all cache entries, globally.
+     * Flushes all cache entries.
      *
      * @return boolean TRUE if the cache entries were successfully flushed, FALSE otherwise.
      */

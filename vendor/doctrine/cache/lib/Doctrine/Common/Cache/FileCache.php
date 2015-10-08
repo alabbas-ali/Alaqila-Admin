@@ -55,11 +55,6 @@ abstract class FileCache extends CacheProvider
     private $replacementCharacters = array('__', '-');
 
     /**
-     * @var int
-     */
-    private $umask;
-
-    /**
      * Constructor.
      *
      * @param string $directory The cache directory.
@@ -67,18 +62,9 @@ abstract class FileCache extends CacheProvider
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($directory, $extension = '', $umask = 0002)
+    public function __construct($directory, $extension = '')
     {
-        // YES, this needs to be *before* createPathIfNeeded()
-        if ( ! is_int($umask)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The umask parameter is required to be integer, was: %s',
-                gettype($umask)
-            ));
-        }
-        $this->umask = $umask;
-
-        if ( ! $this->createPathIfNeeded($directory)) {
+        if ( ! is_dir($directory) && ! @mkdir($directory, 0777, true)) {
             throw new \InvalidArgumentException(sprintf(
                 'The directory "%s" does not exist and could not be created.',
                 $directory
@@ -92,7 +78,6 @@ abstract class FileCache extends CacheProvider
             ));
         }
 
-        // YES, this needs to be *after* createPathIfNeeded()
         $this->directory = realpath($directory);
         $this->extension = (string) $extension;
     }
@@ -182,7 +167,7 @@ abstract class FileCache extends CacheProvider
     private function createPathIfNeeded($path)
     {
         if ( ! is_dir($path)) {
-            if (false === @mkdir($path, 0777 & (~$this->umask), true) && !is_dir($path)) {
+            if (false === @mkdir($path, 0777, true) && !is_dir($path)) {
                 return false;
             }
         }
@@ -211,10 +196,11 @@ abstract class FileCache extends CacheProvider
         }
 
         $tmpFile = tempnam($filepath, 'swap');
-        @chmod($tmpFile, 0666 & (~$this->umask));
 
         if (file_put_contents($tmpFile, $content) !== false) {
             if (@rename($tmpFile, $filename)) {
+                @chmod($filename, 0666 & ~umask());
+
                 return true;
             }
 
