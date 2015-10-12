@@ -45,6 +45,60 @@ class CountryController extends AbstractActionController {
         //var_dump($data);die();
         return new JsonModel(array("data" => $data));
     }
+    public function getAllPagesAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        $draw = isset ($_GET['draw']) ? intval($_GET['draw']) : 0;
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 0;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 10;
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select(array('table'))
+            ->from('Countries\Model\Country', 'table');
+
+        $columns = array(0 => 'id', 1 => 'arname', 2 => 'name');
+        $order = '';
+        if (isset($_GET['order'])) {
+            $orderBy = array();
+            for ($i = 0, $ien = count($_GET['order']); $i < $ien; $i++) {
+                // Convert the column index into the column data property
+                $columnIdx = intval($_GET['order'][$i]['column']);
+                if(isset($columns[$columnIdx])){
+                    $column = $columns[$columnIdx];
+                    $dir = $_GET['order'][$i]['dir'] === 'asc' ?
+                        'ASC' :
+                        'DESC';
+                    $qb->orderBy('table.'.$column, $dir);
+
+                }
+
+            }
+
+        }
+
+        $all_count = count($qb->getQuery()->getResult());
+
+        $qb->setFirstResult($start);
+        $qb->setMaxResults($length);
+        //var_dump($qb->getQuery());die;
+        $countries = $qb->getQuery()->getResult();
+        $data = array();
+        //$i=0;
+        foreach ($countries as $country) {
+            $item = $country->getArrayCopy();
+            $data[] = $item;
+        }
+
+        $arrayff = [
+            "draw" => $draw,
+            "recordsTotal" => $all_count,
+            "recordsFiltered" => $all_count,
+            "data" => $data
+        ];
+        return new JsonModel($arrayff);
+        die;
+    }
 
     public function addAction() {
         $form = new CountryForm();

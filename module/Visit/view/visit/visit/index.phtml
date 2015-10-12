@@ -57,7 +57,8 @@
             "ordering": true,
             "order": [[ 0, "desc" ]],
             "processing": true,
-            "ajax" : "<?php echo $this->url('Visit', array('action'=>'getAll'));?>",
+            "serverSide": true,
+            "ajax" : "<?php echo $this->url('Visit', array('action'=>'getAllPages'));?>",
             "columnDefs" : [{
                             "targets": 0,
                             "data": "id",

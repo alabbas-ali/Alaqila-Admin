@@ -54,6 +54,69 @@ class AudioController extends AbstractActionController {
         }
         return new JsonModel(array("data" => $data));
     }
+    public function getAllPagesAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        $draw = isset ($_GET['draw']) ? intval($_GET['draw']) : 0;
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 0;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 10;
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select(array('table'))
+            ->from('Audio\Model\Audio', 'table');
+
+        $columns = array(0 => 'id', 1 => 'title', 2 => 'country', 3 => 'user', 4 => 'audio_date');
+        $order = '';
+        if (isset($_GET['order'])) {
+            $orderBy = array();
+            for ($i = 0, $ien = count($_GET['order']); $i < $ien; $i++) {
+                // Convert the column index into the column data property
+                $columnIdx = intval($_GET['order'][$i]['column']);
+                if(isset($columns[$columnIdx])){
+                    $column = $columns[$columnIdx];
+                    $dir = $_GET['order'][$i]['dir'] === 'asc' ?
+                        'ASC' :
+                        'DESC';
+                    $qb->orderBy('table.'.$column, $dir);
+
+                }
+
+            }
+
+        }
+
+        if (!$user->isAdmin)
+            $qb->where("table.user='$user->id'");
+
+
+        $all_count = count($qb->getQuery()->getResult());
+
+        $qb->setFirstResult($start);
+        $qb->setMaxResults($length);
+        //var_dump($qb->getQuery());die;
+        $audios = $qb->getQuery()->getResult();
+        $data = array();
+        //$i=0;
+        foreach ($audios as $audio) {
+            $item = $audio->getArrayCopy();
+            $type = 'audio';
+            $visits = $this->getEntityManager()->getRepository('Visit\Model\Visit')->findBy(array('type' => $type, 'type_id' => $item['id']));
+            $item['visits'] = count($visits);
+            $data[] = $item;
+        }
+
+        $arrayff = [
+            "draw" => $draw,
+            "recordsTotal" => $all_count,
+            "recordsFiltered" => $all_count,
+            "data" => $data
+        ];
+        return new JsonModel($arrayff);
+        die;
+    }
+
+    
     
 //    public function commentsAction(){
 //        $id = (int) $this->params()->fromRoute('id', 0);
