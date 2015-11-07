@@ -78,16 +78,12 @@ class AdvertisementController extends AbstractActionController {
                         'ASC' :
                         'DESC';
                     $qb->orderBy('table.'.$column, $dir);
-
                 }
-
             }
-
         }
 
         if (!$user->isAdmin)
             $qb->where("table.user='$user->id'");
-
 
         $all_count = count($qb->getQuery()->getResult());
 

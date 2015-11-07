@@ -45,8 +45,7 @@ class CommentController extends AbstractActionController {
                 ->where("c.type_id in (select news.id from News\Model\News news where news.user='".$user->id."') and c.type='news'")
                 ->orWhere("c.type_id in (select audio.id from Audio\Model\Audio audio where audio.user='".$user->id."') and c.type='audio'")
                 ->orWhere("c.type_id in (select photo.id from Photo\Model\Photo photo where photo.user='".$user->id."') and c.type='photo'")
-                ->orWhere("c.type_id in (select video.id from Video\Model\Video video where video.user='".$user->id."') and c.type='video'")
-                ;
+                ->orWhere("c.type_id in (select video.id from Video\Model\Video video where video.user='".$user->id."') and c.type='video'");
 
             $query = $qb->getQuery();
             $olddata=$qb->getQuery()->getResult();
@@ -175,6 +174,7 @@ class CommentController extends AbstractActionController {
         $id = (int) $this->params()->fromRoute('id', 0);
         return new ViewModel(array('type' => $type,'id' => $id));
     }
+    
     public function getCommentsAction(){
         $id = (int) $this->params()->fromRoute('id', 0);
         $type = $this->params()->fromRoute('type', 0);
@@ -194,16 +194,46 @@ class CommentController extends AbstractActionController {
     
     public function getActiveCommentsAction(){
         $id = (int) $this->params()->fromRoute('id', 0);
-        $type = $this->params()->fromRoute('type', 0);
-        $comments = $this->getEntityManager()->getRepository('Comment\Model\Comment')
-                ->findBy(array('type' => $type, 'type_id' => $id , 'active' => true) , array('id' => 'DESC'));
+        $type = $this->params()->fromRoute('type', '');
+        
+                
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 0;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 10;
+        
+        //var_dump($start);        var_dump($lenght);        die();
+        
+        $commentsCount = $this->getEntityManager()->createQueryBuilder()->select('count(q)')
+            ->from('Comment\Model\Comment', 'q')
+            ->where ('q.type = :type AND q.type_id = :type_id')
+            ->setParameter('type' , $type)
+            ->setParameter('type_id' , $id)
+            ->orderBy('q.id' , 'DESC');
+        
+        $qb = $this->getEntityManager()->createQueryBuilder()->select('q')
+            ->from('Comment\Model\Comment', 'q')
+            ->where ('q.type = :type AND q.type_id = :type_id')
+            ->setParameter('type' , $type)
+            ->setParameter('type_id' , $id)
+            ->orderBy('q.id' , 'DESC')
+            ->setFirstResult($start)
+            ->setMaxResults($length);
+        
+        $all_count = $commentsCount->getQuery()->getSingleScalarResult();
+        $comments = $qb->getQuery()->getResult();
         //var_dump($comments);die;
         $data = array();
         //$i=0;
         foreach ($comments as $comment) {
             $data[] = $comment->getArrayCopy();
         }
-        return new JsonModel($data);
+        
+        $arrayff = [
+            "total" => $all_count,
+            "data" => $data
+        ];
+        
+        //var_dump($arrayff); die();
+        return new JsonModel($arrayff);
     }
 
     public function addAction() {
