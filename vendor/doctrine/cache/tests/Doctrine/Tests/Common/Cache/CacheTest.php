@@ -69,6 +69,8 @@ abstract class CacheTest extends \Doctrine\Tests\DoctrineTestCase
 
         $cache->deleteAll();
 
+        $cache->deleteAll();
+
         // Test saving some values, checking if it exists, and fetching it back with multiGet
         $this->assertTrue($cache->save('key1', 'value1'));
         $this->assertTrue($cache->save('key2', 'value2'));
@@ -461,6 +463,52 @@ abstract class CacheTest extends \Doctrine\Tests\DoctrineTestCase
         $this->assertTrue($cache->save('with_ttl', 'with_ttl', 3600));
     }
 
+    /**
+     * Check to see that objects are correctly serialized and unserialized by the cache
+     * provider.
+     */
+    public function testCachedObject()
+    {
+        $cache = $this->_getCacheDriver();
+        $cache->deleteAll();
+        $obj = new \stdClass();
+        $obj->foo = "bar";
+        $obj2 = new \stdClass();
+        $obj2->bar = "foo";
+        $obj2->obj = $obj;
+        $obj->obj2 = $obj2;
+        $cache->save("obj", $obj);
+
+        $fetched = $cache->fetch("obj");
+
+        $this->assertInstanceOf("stdClass", $obj);
+        $this->assertInstanceOf("stdClass", $obj->obj2);
+        $this->assertInstanceOf("stdClass", $obj->obj2->obj);
+        $this->assertEquals("bar", $fetched->foo);
+        $this->assertEquals("foo", $fetched->obj2->bar);
+    }
+
+    /**
+     * Check to see that objects fetched via fetchMultiple are properly unserialized
+     */
+    public function testFetchMultipleObjects()
+    {
+        $cache = $this->_getCacheDriver();
+        $cache->deleteAll();
+        $obj1 = new \stdClass();
+        $obj1->foo = "bar";
+        $cache->save("obj1", $obj1);
+        $obj2 = new \stdClass();
+        $obj2->bar = "baz";
+        $cache->save("obj2", $obj2);
+
+        $fetched = $cache->fetchMultiple(array("obj1", "obj2"));
+        $this->assertInstanceOf("stdClass", $fetched["obj1"]);
+        $this->assertInstanceOf("stdClass", $fetched["obj2"]);
+        $this->assertEquals("bar", $fetched["obj1"]->foo);
+        $this->assertEquals("baz", $fetched["obj2"]->bar);
+    }
+    
     /**
      * Return whether multiple cache providers share the same storage.
      *

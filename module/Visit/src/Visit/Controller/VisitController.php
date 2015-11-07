@@ -60,6 +60,82 @@ class VisitController extends AbstractActionController {
         }
         return new JsonModel(array("data" => $data));
     }
+    public function getAllPagesAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        $draw = isset ($_GET['draw']) ? intval($_GET['draw']) : 0;
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 0;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 10;
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qbcount = $this->getEntityManager()->createQueryBuilder();
+        $qb->select(array('table'))
+            ->from('Visit\Model\Visit', 'table');
+
+        $qbcount->select('count(table)')
+            ->from('Visit\Model\Visit', 'table');
+
+        $columns = array(0 => 'id', 1 => 'ip_address', 2 => 'visit_date');
+        $order = '';
+        if (isset($_GET['order'])) {
+            $orderBy = array();
+            for ($i = 0, $ien = count($_GET['order']); $i < $ien; $i++) {
+                // Convert the column index into the column data property
+                $columnIdx = intval($_GET['order'][$i]['column']);
+                if(isset($columns[$columnIdx])){
+                    $column = $columns[$columnIdx];
+                    $dir = $_GET['order'][$i]['dir'] === 'asc' ?
+                        'ASC' :
+                        'DESC';
+                    $qb->orderBy('table.'.$column, $dir);
+
+                }
+
+            }
+
+        }
+
+        if (!$user->isAdmin){
+        //$qb->where("table.user='$user->id'");
+            $qb->where("table.type_id in (select news.id from News\Model\News news where news.user='".$user->id."') and table.type='news'");
+            $qb->orWhere("table.type_id in (select audio.id from Audio\Model\Audio audio where audio.user='".$user->id."') and table.type='audio'");
+            $qb->orWhere("table.type_id in (select photo.id from Photo\Model\Photo photo where photo.user='".$user->id."') and table.type='photo'");
+            $qb->orWhere("table.type_id in (select video.id from Video\Model\Video video where video.user='".$user->id."') and table.type='video'");
+            $qb->orWhere("table.type_id in (select advertisement.id from Advertisement\Model\Advertisement advertisement where advertisement.user='".$user->id."') and table.type='advertisement'");
+        
+            $qbcount->where("table.type_id in (select news.id from News\Model\News news where news.user='".$user->id."') and table.type='news'");
+            $qbcount->orWhere("table.type_id in (select audio.id from Audio\Model\Audio audio where audio.user='".$user->id."') and table.type='audio'");
+            $qbcount->orWhere("table.type_id in (select photo.id from Photo\Model\Photo photo where photo.user='".$user->id."') and table.type='photo'");
+            $qbcount->orWhere("table.type_id in (select video.id from Video\Model\Video video where video.user='".$user->id."') and table.type='video'");
+            $qbcount->orWhere("table.type_id in (select advertisement.id from Advertisement\Model\Advertisement advertisement where advertisement.user='".$user->id."') and table.type='advertisement'");
+        }
+            
+
+        
+        $all_count = $qbcount->getQuery()->getSingleScalarResult();
+        //echo "<pre>";print_r($all_count);die;
+
+        $qb->setFirstResult($start);
+        $qb->setMaxResults($length);
+        //var_dump($qb->getQuery());die;
+        $visits = $qb->getQuery()->getResult();
+        $data = array();
+        //$i=0;
+        foreach ($visits as $visit) {
+            $item = $visit->getArrayCopy();
+            $data[] = $item;
+        }
+
+        $arrayff = [
+            "draw" => $draw,
+            "recordsTotal" => $all_count,
+            "recordsFiltered" => $all_count,
+            "data" => $data
+        ];
+        return new JsonModel($arrayff);
+        die;
+    }
     
     public function visitsAction(){
         $type = $this->params()->fromRoute('type', 0);

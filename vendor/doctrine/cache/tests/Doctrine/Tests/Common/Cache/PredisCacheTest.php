@@ -35,6 +35,15 @@ class PredisCacheTest extends CacheTest
         $this->assertNotNull($stats[Cache::STATS_MISSES]);
     }
 
+    public function testHitMissesStatsAreProvided()
+    {
+        $cache = $this->_getCacheDriver();
+        $stats = $cache->getStats();
+
+        $this->assertNotNull($stats[Cache::STATS_HITS]);
+        $this->assertNotNull($stats[Cache::STATS_MISSES]);
+    }
+
     /**
      * @return PredisCache
      */

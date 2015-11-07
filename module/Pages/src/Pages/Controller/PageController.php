@@ -47,6 +47,49 @@ class PageController extends AbstractActionController {
         //var_dump($data);die();
         return new JsonModel(array("data" => $data));
     }
+    public function getAllPagesAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        $draw = isset ($_GET['draw']) ? intval($_GET['draw']) : 0;
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 0;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 10;
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select(array('table'))
+            ->from('Pages\Model\Page', 'table');
+
+        $columns = array();
+        $qb->orderBy('table.ord', 'ASC');
+
+        /*if (!$user->isAdmin)
+            $qb->where("table.user='$user->id'");
+         
+         */
+
+
+        $all_count = count($qb->getQuery()->getResult());
+
+        $qb->setFirstResult($start);
+        $qb->setMaxResults($length);
+        //var_dump($qb->getQuery());die;
+        $pages = $qb->getQuery()->getResult();
+        $data = array();
+        //$i=0;
+        foreach ($pages as $page) {
+            $item = $page->getArrayCopy();
+            $data[] = $item;
+        }
+
+        $arrayff = [
+            "draw" => $draw,
+            "recordsTotal" => $all_count,
+            "recordsFiltered" => $all_count,
+            "data" => $data
+        ];
+        return new JsonModel($arrayff);
+        die;
+    }
 
  public function orderAction() {
 

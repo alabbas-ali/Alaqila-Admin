@@ -16,6 +16,7 @@ return array(
         'Video',
         'Audio',
         'Photo',
+        'Userreq',
         'Comment',
         'Notification',
         'Visit',

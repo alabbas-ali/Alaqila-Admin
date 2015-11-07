@@ -83,10 +83,10 @@ class Page extends \Pages\Model\Page implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inputFilter', 'id', 'name', 'enname', 'image', 'active', 'users');
+            return array('__isInitialized__', 'inputFilter', 'id', 'name', 'enname', 'image', 'active', 'ord');
         }
 
-        return array('__isInitialized__', 'inputFilter', 'id', 'name', 'enname', 'image', 'active', 'users');
+        return array('__isInitialized__', 'inputFilter', 'id', 'name', 'enname', 'image', 'active', 'ord');
     }
 
     /**
@@ -192,6 +192,21 @@ class Page extends \Pages\Model\Page implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getId()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getId();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
+
+        return parent::getId();
+    }
+
     /**
      * {@inheritDoc}
      */

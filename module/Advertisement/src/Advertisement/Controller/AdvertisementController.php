@@ -53,6 +53,67 @@ class AdvertisementController extends AbstractActionController {
         }
         return new JsonModel(array("data" => $data));
     }
+    public function getAllPagesAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        $draw = isset ($_GET['draw']) ? intval($_GET['draw']) : 0;
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 0;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 10;
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select(array('table'))
+            ->from('Advertisement\Model\Advertisement', 'table');
+
+        $columns = array(0 => 'id', 1 => 'title', 2 => 'url', 3 => 'country', 4 => 'user', 5 => 'date');
+        $order = '';
+        if (isset($_GET['order'])) {
+            $orderBy = array();
+            for ($i = 0, $ien = count($_GET['order']); $i < $ien; $i++) {
+                // Convert the column index into the column data property
+                $columnIdx = intval($_GET['order'][$i]['column']);
+                if(isset($columns[$columnIdx])){
+                    $column = $columns[$columnIdx];
+                    $dir = $_GET['order'][$i]['dir'] === 'asc' ?
+                        'ASC' :
+                        'DESC';
+                    $qb->orderBy('table.'.$column, $dir);
+
+                }
+
+            }
+
+        }
+
+        if (!$user->isAdmin)
+            $qb->where("table.user='$user->id'");
+
+
+        $all_count = count($qb->getQuery()->getResult());
+
+        $qb->setFirstResult($start);
+        $qb->setMaxResults($length);
+        //var_dump($qb->getQuery());die;
+        $advertisements = $qb->getQuery()->getResult();
+        $data = array();
+        //$i=0;
+        foreach ($advertisements as $advertisement) {
+            $item = $advertisement->getArrayCopy();
+            $type = 'advertisement';
+            $visits = $this->getEntityManager()->getRepository('Visit\Model\Visit')->findBy(array('type' => $type, 'type_id' => $item['id']));
+            $item['visits'] = count($visits);
+            $data[] = $item;
+        }
+
+        $arrayff = [
+            "draw" => $draw,
+            "recordsTotal" => $all_count,
+            "recordsFiltered" => $all_count,
+            "data" => $data
+        ];
+        return new JsonModel($arrayff);
+        die;
+    }
     
     public function getAllActiveAction() {
         $advertisements = $this->getEntityManager()->getRepository('Advertisement\Model\Advertisement')

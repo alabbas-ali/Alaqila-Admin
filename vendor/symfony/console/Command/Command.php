@@ -488,7 +488,7 @@ class Command
      */
     public function getHelp()
     {
-        return $this->help;
+        return $this->help ?: $this->description;
     }
 
     /**

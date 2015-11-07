@@ -168,8 +168,9 @@
                         <!-- Optionally, you can add icons to the links -->
                         <li><a href="<?php echo $this->url('home') ?>"><i class="ion-ios-speedometer-outline"></i> <span><?php echo $this->translate('dashbord');?></span> </a></li>
                         <?php if($adminUser):?>
-                        <li><a href="<?php echo $this->url('Users') ?>"><i class="ion-ios-people-outline"></i> <span><?php echo $this->translate('userspagetitle');?></span> </a></li>
-                        <li><a href="<?php echo $this->url('Countries') ?>"><i class="ion-ios-people-outline"></i> <span><?php echo $this->translate('countrypagetitle');?></span> </a></li>
+                            <li><a href="<?php echo $this->url('Users') ?>"><i class="ion-ios-people-outline"></i> <span><?php echo $this->translate('userspagetitle');?></span> </a></li>
+                            <li><a href="<?php echo $this->url('Userreq') ?>"><i class="ion-ios-people-outline"></i> <span><?php echo $this->translate('userreqpagetitle');?></span> </a></li>
+                            <li><a href="<?php echo $this->url('Countries') ?>"><i class="ion-ios-people-outline"></i> <span><?php echo $this->translate('countrypagetitle');?></span> </a></li>
                         <li><a href="<?php echo $this->url('Pages') ?>"><i class="fa fa-files-o"></i> <span><?php echo $this->translate('pagespagetitle');?></span> </a></li>
                         <li><a href="<?php echo $this->url('Programs') ?>"><i class="ion-ios-paper-outline"></i> <span><?php echo $this->translate('programspagetitle');?></span> </a></li>
                         <?php endif;?>

@@ -48,6 +48,11 @@ abstract class FileCache extends CacheProvider
     private $umask;
 
     /**
+     * @var int
+     */
+    private $umask;
+
+    /**
      * Constructor.
      *
      * @param string $directory The cache directory.

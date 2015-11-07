@@ -14,12 +14,23 @@ namespace Symfony\Component\Console\Tests\Helper;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Console\Tests;
 
 /**
  * @group time-sensitive
  */
 class ProgressBarTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        Tests\with_clock_mock(true);
+    }
+
+    protected function tearDown()
+    {
+        Tests\with_clock_mock(false);
+    }
+
     public function testMultipleStart()
     {
         $bar = new ProgressBar($output = $this->getOutputStream());
