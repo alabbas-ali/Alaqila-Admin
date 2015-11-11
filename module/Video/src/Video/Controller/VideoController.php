@@ -133,6 +133,48 @@ class VideoController extends AbstractActionController
         }
         return new JsonModel($data);
     }
+    
+     public function getAllActiveNewAction() {
+        
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 6;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 16;
+        $userId = isset ($_GET['userId']) ? intval($_GET['userId']) : 0;
+        
+        if($userId != 0){
+            $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $userId);
+            $videosCount = $this->getEntityManager()->createQueryBuilder()->select('count(u)')
+                ->from('Video\Model\Video', 'u')
+                ->where ('u.active = :active AND u.user = :user')
+                ->setParameter('active' , 1)
+                ->setParameter('user' , $user)
+                ->orderBy('u.id' , 'DESC');
+            $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
+                    ->findby(array('active' => 1 , 'user' => $user), array('id' => 'DESC'), $length , $start); 
+            
+        }else{
+            $videosCount = $this->getEntityManager()->createQueryBuilder()->select('count(q)')
+                ->from('Video\Model\Video', 'q')
+                ->where ('q.active = 1 ')
+                ->orderBy('q.id' , 'DESC');
+            $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
+                ->findBy(array('active' => '1'), array('id' => 'DESC'), $length , $start);
+        }
+         
+        
+        $all_count = $videosCount->getQuery()->getSingleScalarResult();
+        
+        $data = array();
+        foreach ($videos as $video) {
+            $data[] = $video->getArrayCopy();
+        }
+        
+        $arrayff = [
+            "total" => $all_count,
+            "data" => $data
+        ];
+        
+        return new JsonModel($arrayff);        
+    }
 
     public function getPublicAction()
     {

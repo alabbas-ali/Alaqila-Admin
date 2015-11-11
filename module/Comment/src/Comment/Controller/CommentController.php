@@ -192,7 +192,21 @@ class CommentController extends AbstractActionController {
         return new JsonModel(array("data" => $data));
     }
     
-    public function getActiveCommentsAction(){
+     public function getActiveCommentsAction(){
+        $id = (int) $this->params()->fromRoute('id', 0);
+        $type = $this->params()->fromRoute('type', 0);
+        $comments = $this->getEntityManager()->getRepository('Comment\Model\Comment')
+                ->findBy(array('type' => $type, 'type_id' => $id , 'active' => true) , array('id' => 'DESC'));
+        //var_dump($comments);die;
+        $data = array();
+        //$i=0;
+        foreach ($comments as $comment) {
+            $data[] = $comment->getArrayCopy();
+        }
+        return new JsonModel($data);
+    }
+    
+    public function getActiveCommentsNewAction(){
         $id = (int) $this->params()->fromRoute('id', 0);
         $type = $this->params()->fromRoute('type', '');
         

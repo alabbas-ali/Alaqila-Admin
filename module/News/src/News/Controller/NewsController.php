@@ -119,26 +119,7 @@ class NewsController extends AbstractActionController {
         die;
     }
     
-//    public function notificationsAction(){
-//        $id = (int) $this->params()->fromRoute('id', 0);
-//        return new ViewModel(array('id' => $id));
-//    }
-//    public function getnotificationsAction(){
-//        $id = (int) $this->params()->fromRoute('id', 0);
-//        if (!$id) {
-//            return $this->redirect()->toRoute('News');
-//        }
-//        $notifications = $this->getEntityManager()->getRepository('Comment\Model\Comment')->findBy(array('type' => 'news', 'type_id' => $id));
-//        //var_dump($notifications);die;
-//        $data = array();
-//        //$i=0;
-//        foreach ($notifications as $notification) {
-//            $data[] = $notification->getArrayCopy();
-//        }
-//        return new JsonModel(array("data" => $data));
-//    }
-    
-    public function getAllActiveAction() {
+    public function getAllActiveAction() {        
         $newss = $this->getEntityManager()->getRepository('News\Model\News')
                 ->findBy(array('active' => '1'), array('id' => 'DESC'), 16 , 6);
         $data = array();
@@ -148,28 +129,49 @@ class NewsController extends AbstractActionController {
         return new JsonModel($data);
     }
     
+     public function getAllActiveNewAction() {
+        
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 6;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 16;
+        $userId = isset ($_GET['userId']) ? intval($_GET['userId']) : 0;
+        
+        if($userId != 0){
+            $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $userId);
+            $newsCount = $this->getEntityManager()->createQueryBuilder()->select('count(u)')
+                ->from('News\Model\News', 'u')
+                ->where ('u.active = :active AND u.user = :user')
+                ->setParameter('active' , 1)
+                ->setParameter('user' , $user)
+                ->orderBy('u.id' , 'DESC');
+            $newss = $this->getEntityManager()->getRepository('News\Model\News')
+                    ->findby(array('active' => 1 , 'user' => $user), array('id' => 'DESC'), $length , $start); 
+            
+        }else{
+            $newsCount = $this->getEntityManager()->createQueryBuilder()->select('count(q)')
+                ->from('News\Model\News', 'q')
+                ->where ('q.active = 1 ')
+                ->orderBy('q.id' , 'DESC');
+            $newss = $this->getEntityManager()->getRepository('News\Model\News')
+                ->findBy(array('active' => '1'), array('id' => 'DESC'), $length , $start);
+        }
+        
+        $all_count = $newsCount->getQuery()->getSingleScalarResult();
+ 
+        $data = array();
+        foreach ($newss as $news) {
+            $data[] = $news->getArrayCopy();
+        }
+        
+        $arrayff = [
+            "total" => $all_count,
+            "data" => $data
+        ];
+        
+        //var_dump($arrayff); die();
+        return new JsonModel($arrayff);        
+    }
+    
     public function getPublicAction() {
-//        $num = (int) $this->params()->fromRoute('id', 0);
-//        $qb = $this->getEntityManager()->createQueryBuilder();
-//
-//        $qb->select('t.id','COUNT(v.id) visits')
-//                ->from('News\Model\News', 't')
-//                ->leftJoin('Visit\Model\Visit', 'v',\Doctrine\ORM\Query\Expr\Join::WITH,"v.type_id=t.id")
-//                ->where("v.type='news'")
-//                ->groupBy('t.id')
-//                ->orderBy('visits', 'DESC')
-//                ->setMaxResults( $num );
-//
-//        $query = $qb->getQuery();
-//        //var_dump($query);die;
-//        $result=$qb->getQuery()->getResult();
-//        $data = array();
-//        foreach ($result as $row) {
-//            $news = $this->getEntityManager()->find('News\Model\News', $row['id']);
-//            $data[] = $news->getArrayCopy();
-//            
-//        }
-//        return new JsonModel($data);
         
         $newss = $this->getEntityManager()->getRepository('News\Model\News')
                 ->findby(array('active' => 1), array('id' => 'DESC') , 6 , 0);
@@ -181,28 +183,7 @@ class NewsController extends AbstractActionController {
     }
     
     public function getHomePublicAction() {
-//        $num = (int) $this->params()->fromRoute('id', 0);
-//        $qb = $this->getEntityManager()->createQueryBuilder();
-//
-//        $qb->select('t.id','COUNT(v.id) visits')
-//                ->from('News\Model\News', 't')
-//                ->leftJoin('Visit\Model\Visit', 'v',\Doctrine\ORM\Query\Expr\Join::WITH,"v.type_id=t.id")
-//                ->where("v.type='news'")
-//                ->groupBy('t.id')
-//                ->orderBy('visits', 'DESC')
-//                ->setMaxResults( $num );
-//
-//        $query = $qb->getQuery();
-//        //var_dump($query);die;
-//        $result=$qb->getQuery()->getResult();
-//        $data = array();
-//        foreach ($result as $row) {
-//            $news = $this->getEntityManager()->find('News\Model\News', $row['id']);
-//            $data[] = $news->getArrayCopy();
-//            
-//        }
-//        return new JsonModel($data);
-        
+   
         $newss = $this->getEntityManager()->getRepository('News\Model\News')
                 ->findby(array('active' => 1), array('id' => 'DESC') , 6 , 0);
         $data = array();

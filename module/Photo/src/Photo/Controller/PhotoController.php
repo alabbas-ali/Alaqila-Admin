@@ -116,25 +116,6 @@ class PhotoController extends AbstractActionController {
         die;
     }
     
-//    public function commentsAction(){
-//        $id = (int) $this->params()->fromRoute('id', 0);
-//        return new ViewModel(array('id' => $id));
-//    }
-//    public function getcommentsAction(){
-//        $id = (int) $this->params()->fromRoute('id', 0);
-//        if (!$id) {
-//            return $this->redirect()->toRoute('Photo');
-//        }
-//        $comments = $this->getEntityManager()->getRepository('Comment\Model\Comment')->findBy(array('type' => 'photo', 'type_id' => $id));
-//        //var_dump($comments);die;
-//        $data = array();
-//        //$i=0;
-//        foreach ($comments as $comment) {
-//            $data[] = $comment->getArrayCopy();
-//        }
-//        return new JsonModel(array("data" => $data));
-//    }
-    
     public function getAllActiveAction() {
         $photos = $this->getEntityManager()->getRepository('Photo\Model\Photo')
                 ->findBy(array('active' => '1'), array('id' => 'DESC'), 16 ,6 );
@@ -145,6 +126,47 @@ class PhotoController extends AbstractActionController {
         return new JsonModel($data);
     }
     
+    public function getAllActiveNewAction() {
+        
+        $start = isset ($_GET['start']) ? intval($_GET['start']) : 6;
+        $length = isset ($_GET['length']) ? intval($_GET['length']) : 16;
+        $userId = isset ($_GET['userId']) ? intval($_GET['userId']) : 0;
+        
+        if($userId != 0){
+            $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $userId);
+            $photosCount = $this->getEntityManager()->createQueryBuilder()->select('count(u)')
+                ->from('Photo\Model\Photo', 'u')
+                ->where ('u.active = :active AND u.user = :user')
+                ->setParameter('active' , 1)
+                ->setParameter('user' , $user)
+                ->orderBy('u.id' , 'DESC');
+            $photos = $this->getEntityManager()->getRepository('Photo\Model\Photo')
+                    ->findby(array('active' => 1 , 'user' => $user), array('id' => 'DESC'), $length , $start); 
+            
+        }else{
+            $photosCount = $this->getEntityManager()->createQueryBuilder()->select('count(q)')
+                ->from('Photo\Model\Photo', 'q')
+                ->where ('q.active = 1 ')
+                ->orderBy('q.id' , 'DESC');
+            $photos = $this->getEntityManager()->getRepository('Photo\Model\Photo')
+                ->findBy(array('active' => '1'), array('id' => 'DESC'), $length , $start);
+        }
+
+        $all_count = $photosCount->getQuery()->getSingleScalarResult();
+
+        $data = array();
+        foreach ($photos as $photo) {
+            $data[] = $photo->getArrayCopy();
+        }
+        
+        $arrayff = [
+            "total" => $all_count,
+            "data" => $data
+        ];
+        
+        return new JsonModel($arrayff);        
+    }
+
     public function getPublicAction() {
 //        $num = (int) $this->params()->fromRoute('id', 0);
 //        $qb = $this->getEntityManager()->createQueryBuilder();
