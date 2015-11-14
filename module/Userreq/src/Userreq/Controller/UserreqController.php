@@ -17,9 +17,6 @@ namespace Userreq\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
-use Userreq\Model\Userreq;
-use Notification\Model\Notification;
-use Userreq\Form\UserreqForm;
 
 use ZfcUserOver\Model\User;
 use ZfcUserOver\Service\User as UserService;
@@ -56,7 +53,6 @@ class UserreqController extends AbstractActionController
 
     public function getAllAction()
     {
-        $user = $this->zfcUserAuthentication()->getIdentity();
         $userreqs = $this->getEntityManager()->getRepository('Userreq\Model\Userreq')->findAll();
         $data = array();
         //$i=0;
