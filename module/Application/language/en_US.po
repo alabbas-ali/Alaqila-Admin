@@ -270,3 +270,9 @@ msgstr "Is Supervisor"
 
 msgid "tableispublic"
 msgstr "Is Public"
+
+msgid "userreqpagetitle"
+msgstr "User Requests"
+
+msgid "tablepage"
+msgstr "Page Required"

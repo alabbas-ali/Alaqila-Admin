@@ -350,3 +350,9 @@ msgstr "مشرف"
 
 msgid "tableispublic"
 msgstr "عام (خاص)"
+
+msgid "userreqpagetitle"
+msgstr "طلبات المستخدمين"
+
+msgid "tablepage"
+msgstr "الصفحة"
