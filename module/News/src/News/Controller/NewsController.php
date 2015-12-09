@@ -172,9 +172,16 @@ class NewsController extends AbstractActionController {
     }
     
     public function getPublicAction() {
-        
-        $newss = $this->getEntityManager()->getRepository('News\Model\News')
+        $userId = isset ($_GET['userId']) ? intval($_GET['userId']) : 0;
+        if($userId != 0){
+            $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $userId);
+            $newss = $this->getEntityManager()->getRepository('News\Model\News')
+                ->findby(array('active' => 1, 'user' => $user), array('id' => 'DESC') , 6 , 0);
+        }else{
+             $newss = $this->getEntityManager()->getRepository('News\Model\News')
                 ->findby(array('active' => 1), array('id' => 'DESC') , 6 , 0);
+            
+        }
         $data = array();
         foreach ($newss as $news) {
             $data[] = $news->getArrayCopy();

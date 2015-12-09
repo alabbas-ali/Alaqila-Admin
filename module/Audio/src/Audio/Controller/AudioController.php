@@ -163,29 +163,16 @@ class AudioController extends AbstractActionController {
     }
 
     public function getPublicAction() {
-//        $num = (int) $this->params()->fromRoute('id', 0);
-//        $qb = $this->getEntityManager()->createQueryBuilder();
-//
-//        $qb->select('t.id','COUNT(v.id) visits')
-//                ->from('Audio\Model\Audio', 't')
-//                ->leftJoin('Visit\Model\Visit', 'v',\Doctrine\ORM\Query\Expr\Join::WITH,"v.type_id=t.id")
-//                ->where("v.type='audio'")
-//                ->groupBy('t.id')
-//                ->orderBy('visits', 'DESC')
-//                ->setMaxResults( $num );
-//
-//        $query = $qb->getQuery();
-//        //var_dump($query);die;
-//        $result=$qb->getQuery()->getResult();
-//        $data = array();
-//        foreach ($result as $row) {
-//            $audio = $this->getEntityManager()->find('Audio\Model\Audio', $row['id']);
-//            $data[] = $audio->getArrayCopy();
-//            
-//        }
-//        return new JsonModel($data);
-        $audios = $this->getEntityManager()->getRepository('Audio\Model\Audio')
+        $userId = isset ($_GET['userId']) ? intval($_GET['userId']) : 0;
+        if($userId != 0){
+            $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $userId);
+            $audios = $this->getEntityManager()->getRepository('Audio\Model\Audio')
+                ->findBy(array('active' => '1', 'user' => $user), array('id' => 'DESC'), 6, 0);
+        }else{
+           $audios = $this->getEntityManager()->getRepository('Audio\Model\Audio')
                 ->findBy(array('active' => '1'), array('id' => 'DESC'), 6, 0);
+        }
+        
         $data = array();
         foreach ($audios as $audio) {
             $data[] = $audio->getArrayCopy();

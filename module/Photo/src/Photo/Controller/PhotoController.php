@@ -168,29 +168,17 @@ class PhotoController extends AbstractActionController {
     }
 
     public function getPublicAction() {
-//        $num = (int) $this->params()->fromRoute('id', 0);
-//        $qb = $this->getEntityManager()->createQueryBuilder();
-//
-//        $qb->select('t.id','COUNT(v.id) visits')
-//                ->from('Photo\Model\Photo', 't')
-//                ->leftJoin('Visit\Model\Visit', 'v',\Doctrine\ORM\Query\Expr\Join::WITH,"v.type_id=t.id")
-//                ->where("v.type='photo'")
-//                ->groupBy('t.id')
-//                ->orderBy('visits', 'DESC')
-//                ->setMaxResults( $num );
-//
-//        $query = $qb->getQuery();
-//        //var_dump($query);die;
-//        $result=$qb->getQuery()->getResult();
-//        $data = array();
-//        foreach ($result as $row) {
-//            $photo = $this->getEntityManager()->find('Photo\Model\Photo', $row['id']);
-//            $data[] = $photo->getArrayCopy();
-//            
-//        }
-//        return new JsonModel($data);
-        $photos = $this->getEntityManager()->getRepository('Photo\Model\Photo')
+        $userId = isset ($_GET['userId']) ? intval($_GET['userId']) : 0;
+        if($userId != 0){
+            $user = $this->getEntityManager()->find('ZfcUserOver\Model\User', $userId);
+            $photos = $this->getEntityManager()->getRepository('Photo\Model\Photo')
+                ->findBy(array('active' => '1', 'user' => $user), array('id' => 'DESC'), 6 ,0 );
+        
+        }else{
+            $photos = $this->getEntityManager()->getRepository('Photo\Model\Photo')
                 ->findBy(array('active' => '1'), array('id' => 'DESC'), 6 ,0 );
+        }
+        
         $data = array();
         foreach ($photos as $photo) {
             $data[] = $photo->getArrayCopy();
