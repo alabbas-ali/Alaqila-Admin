@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: ZendSkeletonApplication\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-05 22:17-0700\n"
-"PO-Revision-Date: 2015-07-10 03:30+0200\n"
+"PO-Revision-Date: 2016-01-28 01:12+0100\n"
 "Last-Translator: Evan Coury <me@evancoury.com>\n"
 "Language-Team: ZF Contibutors <zf-devteam@zend.com>\n"
 "Language: en_US\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: translate\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.7.4\n"
+"X-Generator: Poedit 1.8.6\n"
 "X-Poedit-SearchPath-0: ..\n"
 
 #: ../view/layout/layout.phtml:36
@@ -215,13 +215,13 @@ msgid "pagespagetitle"
 msgstr " Pages "
 
 msgid "countrypagetitle"
-msgstr " Countries "
+msgstr "Countries "
 
 msgid "commentspagetitle"
 msgstr " Comments "
 
 msgid "userspagetitle"
-msgstr " Users "
+msgstr "Users "
 
 msgid "visitpagetitle"
 msgstr " visitors "
@@ -230,22 +230,22 @@ msgid "uploadpagetitle"
 msgstr "Uplude Center"
 
 msgid "settingspagetitle"
-msgstr " Settings "
+msgstr "Settings "
 
 msgid "programspagetitle"
-msgstr " Prodcast Table "
+msgstr "Prodcast Table "
 
 msgid "tomorrowpagetitle"
-msgstr " Tomorrow Program "
+msgstr "Tomorrow Program "
 
 msgid "todaypagetitle"
-msgstr " Today Program "
+msgstr "Today Program "
 
 msgid "programdayform"
 msgstr "Program Day"
 
 msgid "startdateform"
-msgstr " Program Start From"
+msgstr "Program Start From"
 
 msgid "enddateto"
 msgstr "Program End In "
@@ -276,3 +276,9 @@ msgstr "User Requests"
 
 msgid "tablepage"
 msgstr "Page Required"
+
+msgid "fulladvpagetitle"
+msgstr "Full Screen Adv"
+
+msgid "notificationspagetitle"
+msgstr "Notifications"

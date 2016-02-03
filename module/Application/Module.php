@@ -59,6 +59,7 @@ class Module {
         'Programs/getAllActive',
         'Settings/getAll',
         'Userprofile/getByID',
+        'FullAdv/getRandomOne',
         'Comment/add',
         'error/404',
     );

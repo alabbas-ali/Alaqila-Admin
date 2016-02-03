@@ -7,17 +7,17 @@
  */
 
 /**
- * Description of AlbumForm
+ * Description of FullAdvForm
  *
  * @author abass
  */
 
-namespace Advertisement\Form;
+namespace FullAdv\Form;
 
 use Zend\Form\Form;
 use Doctrine\ORM\EntityManager;
 
-class AdvertisementForm extends Form {
+class FullAdvForm extends Form {
 
     protected $entityManager;
 

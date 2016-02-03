@@ -150,7 +150,7 @@ class AdvertisementController extends AbstractActionController {
     }
 
     public function addAction() {
-        $form = new AdvertisementForm($this->getEntityManager(),$this->zfcUserAuthentication()->getIdentity()->getId());
+        $form = new AdvertisementForm($this->getEntityManager());
         $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();
@@ -224,7 +224,7 @@ class AdvertisementController extends AbstractActionController {
             ));
         }
 
-        $form = new AdvertisementForm($this->getEntityManager(),$this->zfcUserAuthentication()->getIdentity()->getId());
+        $form = new AdvertisementForm($this->getEntityManager());
         $form->bind($advertisement);
         $form->get('submit')->setAttribute('value', 'Edit');
 

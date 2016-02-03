@@ -356,3 +356,11 @@ msgstr "طلبات المستخدمين"
 
 msgid "tablepage"
 msgstr "الصفحة"
+
+msgid "fulladvpagetitle"
+msgstr "اعلانات ملئ الشاشة"
+
+msgid "notificationspagetitle"
+msgstr "التنبيهات"
+
+
