@@ -169,8 +169,10 @@ class AudioController extends AbstractActionController {
             $audios = $this->getEntityManager()->getRepository('Audio\Model\Audio')
                 ->findBy(array('active' => '1', 'user' => $user), array('id' => 'DESC'), 6, 0);
         }else{
+            $user = $this->getEntityManager()->getRepository('ZfcUserOver\Model\User')
+                ->findby(array('isPublic' => 1));
            $audios = $this->getEntityManager()->getRepository('Audio\Model\Audio')
-                ->findBy(array('active' => '1'), array('id' => 'DESC'), 6, 0);
+                ->findBy(array('active' => '1', 'user' => $user), array('id' => 'DESC'), 6, 0);
         }
         
         $data = array();
@@ -181,30 +183,11 @@ class AudioController extends AbstractActionController {
     }
 
     public function getHomePublicAction() {
-//        $num = (int) $this->params()->fromRoute('id', 0);
-//        $qb = $this->getEntityManager()->createQueryBuilder();
-//
-//        $qb->select('t.id','COUNT(v.id) visits')
-//                ->from('Audio\Model\Audio', 't')
-//                ->leftJoin('Visit\Model\Visit', 'v',\Doctrine\ORM\Query\Expr\Join::WITH,"v.type_id=t.id")
-//                ->where("v.type='audio'")
-//                ->groupBy('t.id')
-//                ->orderBy('visits', 'DESC')
-//                ->setMaxResults( $num );
-//
-//        $query = $qb->getQuery();
-//        //var_dump($query);die;
-//        $result=$qb->getQuery()->getResult();
-//        $data = array();
-//        foreach ($result as $row) {
-//            $audio = $this->getEntityManager()->find('Audio\Model\Audio', $row['id']);
-//            $data[] = $audio->getArrayCopy();
-//            
-//        }
-//        return new JsonModel($data);
-
+        $user = $this->getEntityManager()->getRepository('ZfcUserOver\Model\User')
+                ->findby(array('isPublic' => 1));
+        
         $audios = $this->getEntityManager()->getRepository('Audio\Model\Audio')
-                ->findBy(array('active' => '1'), array('id' => 'DESC'), 3, 0);
+                ->findBy(array('active' => '1' , 'user' => $user), array('id' => 'DESC'), 3, 0);
         $data = array();
         foreach ($audios as $audio) {
             $data[] = $audio->getArrayCopy();

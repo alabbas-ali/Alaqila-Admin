@@ -178,8 +178,10 @@ class NewsController extends AbstractActionController {
             $newss = $this->getEntityManager()->getRepository('News\Model\News')
                 ->findby(array('active' => 1, 'user' => $user), array('id' => 'DESC') , 6 , 0);
         }else{
+            $user = $this->getEntityManager()->getRepository('ZfcUserOver\Model\User')
+                ->findby(array('isPublic' => 1));
              $newss = $this->getEntityManager()->getRepository('News\Model\News')
-                ->findby(array('active' => 1), array('id' => 'DESC') , 6 , 0);
+                ->findby(array('active' => 1, 'user' => $user), array('id' => 'DESC') , 6 , 0);
             
         }
         $data = array();
@@ -190,9 +192,10 @@ class NewsController extends AbstractActionController {
     }
     
     public function getHomePublicAction() {
-   
+        $user = $this->getEntityManager()->getRepository('ZfcUserOver\Model\User')
+                ->findby(array('isPublic' => 1));
         $newss = $this->getEntityManager()->getRepository('News\Model\News')
-                ->findby(array('active' => 1), array('id' => 'DESC') , 6 , 0);
+                ->findby(array('active' => 1, 'user' => $user), array('id' => 'DESC') , 6 , 0);
         $data = array();
         foreach ($newss as $news) {
             $data[] = $news->getArrayCopy();

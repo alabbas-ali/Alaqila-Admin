@@ -175,8 +175,10 @@ class PhotoController extends AbstractActionController {
                 ->findBy(array('active' => '1', 'user' => $user), array('id' => 'DESC'), 6 ,0 );
         
         }else{
+            $user = $this->getEntityManager()->getRepository('ZfcUserOver\Model\User')
+                ->findby(array('isPublic' => 1));
             $photos = $this->getEntityManager()->getRepository('Photo\Model\Photo')
-                ->findBy(array('active' => '1'), array('id' => 'DESC'), 6 ,0 );
+                ->findBy(array('active' => '1', 'user' => $user), array('id' => 'DESC'), 6 ,0 );
         }
         
         $data = array();
@@ -208,8 +210,11 @@ class PhotoController extends AbstractActionController {
 //            
 //        }
 //        return new JsonModel($data);
+        
+         $user = $this->getEntityManager()->getRepository('ZfcUserOver\Model\User')
+                ->findby(array('isPublic' => 1));
          $photos = $this->getEntityManager()->getRepository('Photo\Model\Photo')
-                ->findBy(array('active' => '1'), array('id' => 'DESC'), 3 ,0 );
+                ->findBy(array('active' => '1', 'user' => $user), array('id' => 'DESC'), 3 ,0 );
         $data = array();
         foreach ($photos as $photo) {
             $data[] = $photo->getArrayCopy();

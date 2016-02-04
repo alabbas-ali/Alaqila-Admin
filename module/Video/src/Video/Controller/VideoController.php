@@ -185,8 +185,10 @@ class VideoController extends AbstractActionController
         $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
             ->findBy(array('active' => '1', 'user' => $user ), array('id' => 'DESC'), 6, 0);
         }else{
+            $user = $this->getEntityManager()->getRepository('ZfcUserOver\Model\User')
+                ->findby(array('isPublic' => 1));
             $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
-            ->findBy(array('active' => '1'), array('id' => 'DESC'), 6, 0);
+            ->findBy(array('active' => '1', 'user' => $user), array('id' => 'DESC'), 6, 0);
         }
         $data = array();
         foreach ($videos as $video) {
@@ -197,29 +199,10 @@ class VideoController extends AbstractActionController
 
     public function getHomePublicAction()
     {
-//        $num = (int) $this->params()->fromRoute('id', 0);
-//        $qb = $this->getEntityManager()->createQueryBuilder();
-//
-//        $qb->select('t.id','COUNT(v.id) visits')
-//                ->from('Video\Model\Video', 't')
-//                ->leftJoin('Visit\Model\Visit', 'v',\Doctrine\ORM\Query\Expr\Join::WITH,"v.type_id=t.id")
-//                ->where("v.type='video'")
-//                ->groupBy('t.id')
-//                ->orderBy('visits', 'DESC')
-//                ->setMaxResults( $num );
-//
-//        $query = $qb->getQuery();
-//        //var_dump($query);die;
-//        $result=$qb->getQuery()->getResult();
-//        $data = array();
-//        foreach ($result as $row) {
-//            $video = $this->getEntityManager()->find('Video\Model\Video', $row['id']);
-//            $data[] = $video->getArrayCopy();
-//            
-//        }
-//        return new JsonModel($data);
+        $user = $this->getEntityManager()->getRepository('ZfcUserOver\Model\User')
+                ->findby(array('isPublic' => 1));
         $videos = $this->getEntityManager()->getRepository('Video\Model\Video')
-            ->findBy(array('active' => '1'), array('id' => 'DESC'), 6, 0);
+            ->findBy(array('active' => '1', 'user' => $user), array('id' => 'DESC'), 6, 0);
         $data = array();
         foreach ($videos as $video) {
             $data[] = $video->getArrayCopy();
