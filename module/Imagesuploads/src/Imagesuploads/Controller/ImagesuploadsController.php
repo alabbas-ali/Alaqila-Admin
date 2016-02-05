@@ -68,10 +68,28 @@ class ImagesuploadsController extends AbstractActionController {
         return $return;
     }
 
-    public function uploadProgressAction() {
-        $id = $this->params()->fromQuery('id', null);
-        $progress = new \Zend\ProgressBar\Upload\ApcProgress();
-        return new JsonModel($progress->getProgress($id));
+     public function uploadProgressAction() {
+        $id = $this->params()->fromRoute('id', null);
+        $data = uploadprogress_get_info($id);
+        if($data){
+	        $status  = array(
+	            'total'    => $data['bytes_total'],
+	            'current'  => $data['bytes_uploaded'],
+	            'rate'     => $data['speed_average'],
+	            'message'  => '',
+	            'done'     => false
+	        );
+        }else{
+	        $status  = array(
+	            'total'    => 0,
+	            'current'  => 0,
+	            'rate'     => 0,
+	            'message'  => '',
+	            'done'     => true
+	        );
+        }
+        
+        return new JsonModel($status);
     }
 
     public function fileDeleteAction() {

@@ -29,7 +29,7 @@ return array(
                         'upload-progress' => array(
                             'type'    => 'Literal',
                             'options' => array(
-                                'route'    => '/upload-progress',
+                                'route'    => '/upload-progress[/:id]',
                                 'defaults' => array(
                                     'controller'    => __NAMESPACE__.'\Controller\\'.__NAMESPACE__,
                                     'action'        => 'uploadProgress',

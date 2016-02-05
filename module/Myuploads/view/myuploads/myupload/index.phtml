@@ -34,16 +34,16 @@
                                     <?php $form->setAttribute('action', $this->url('Myuploads')); ?>
                                     <?php $form->prepare(); ?>
                                     <?php echo $this->form()->openTag($form); ?>
-                                    <?php echo $this->formFileApcProgress(); // Must come before the file input! ?>
+                                    <?php //echo $this->formFileApcProgress(); // Must come before the file input! ?>
                                     <?php //echo $this->formFileSessionProgress(); // Must come before the file input! ?>
-
+                                    <input type="hidden" name="UPLOAD_IDENTIFIER" id="progress_key" value="<?php print rand(000000000 , 9999999999); ?>" />
                                     <div class="form-element">
                                         <?php $fileElement = $form->get('file'); ?>
                                         <?php echo $this->formLabel($fileElement); ?>
                                         <?php echo $this->formFile($fileElement); ?>
                                         <?php echo $this->formElementErrors($fileElement); ?>
 
-                                        <button>Submit</button>
+                                        <button class="SubmitBtn">Submit</button>
                                     </div>
 
 
@@ -71,7 +71,7 @@
                                             </div>
                                         </div>
                                         <div class="btns">
-                                            <button id="image_uplode">Submit</button>
+                                            <button id="image_uplode" class="SubmitBtn">Submit</button>
                                         </div>
                                     </div>
 
@@ -243,6 +243,7 @@
             } else {
                 showProgress(100, 'Complete!');
                 clearInterval(progressInterval);
+                $(".SubmitBtn").show();
                 //$('').html('File Has Been Upluded ...');
                 $("#files_contanier").empty();
                 end = false;
@@ -254,7 +255,8 @@
 
     function startProgress() {
         showProgress(0, 'Starting upload...');
-        progressInterval = setInterval(getProgress, 900);
+        $(".SubmitBtn").hide();
+        progressInterval = setInterval(getProgress, 1000);
     }
 
     function showProgress(amount, message) {
@@ -288,6 +290,7 @@
             var blob = dataURItoBlob(imageData);
             var fd = new FormData(document.getElementById('file-form'));
             var request = new XMLHttpRequest();
+            fd.append("UPLOAD_IDENTIFIER", $('#progress_key').val());
             fd.append("file", blob, "filename.jpg");
             request.open("POST", "<?php echo $this->url('Myuploads'); ?>", true);
             request.send(fd);

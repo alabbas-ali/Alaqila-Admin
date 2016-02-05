@@ -29,7 +29,10 @@
                                 <div id="file_upload_contanier">
 
                                     <div class="image-editor" id="image-editor" >
+                                        <input type="hidden" name="UPLOAD_IDENTIFIER" id="progress_key" value="<?php print rand(000000000 , 9999999999); ?>" />
+                                        
                                         <input type="file" style="visibility: hidden" class="cropit-image-input" />
+                                        
                                         <div class="btn btn-dropbox select-image-btn">Select new image</div>
                                         <div class="cropit-image-preview-container">
                                             <div class="cropit-image-preview">
@@ -50,7 +53,7 @@
                                             </div>
                                         </div>
                                         <div class="btns">
-                                            <button id="image_uplode">Submit</button>
+                                            <button id="image_uplode" class="SubmitBtn">Submit</button>
                                         </div>
                                     </div>
 
@@ -221,6 +224,7 @@
                 showProgress(value, 'Uploading...');
             } else {
                 showProgress(100, 'Complete!');
+                $(".SubmitBtn").show();
                 clearInterval(progressInterval);
                 //$('').html('File Has Been Upluded ...');
                 $("#files_contanier").empty();
@@ -233,7 +237,8 @@
 
     function startProgress() {
         showProgress(0, 'Starting upload...');
-        progressInterval = setInterval(getProgress, 900);
+        $(".SubmitBtn").hide();
+        progressInterval = setInterval(getProgress, 1000);
     }
 
     function showProgress(amount, message) {
@@ -267,6 +272,7 @@
             var blob = dataURItoBlob(imageData);
             var fd = new FormData(document.getElementById('file-form'));
             var request = new XMLHttpRequest();
+            fd.append("UPLOAD_IDENTIFIER", $('#progress_key').val());
             fd.append("file", blob, "filename.jpg");
             request.open("POST", "<?php echo $this->url('Imagesuploads'); ?>", true);
             request.send(fd);
