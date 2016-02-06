@@ -69,7 +69,12 @@ class Settings implements InputFilterAwareInterface {
      * @ORM\Column(type="string")
      */
     protected $instagram;
-
+    
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $googleaddcode;
+    
     /**
      * @ORM\Column(type="string")
      */
@@ -101,6 +106,7 @@ class Settings implements InputFilterAwareInterface {
         $this->news_num = (isset($data['news_num'])) ? $data['news_num'] : null;
         $this->instagram = (isset($data['instagram'])) ? $data['instagram'] : null;
         $this->upload_folder = (isset($data['upload_folder'])) ? $data['upload_folder'] : null;
+        $this->googleaddcode = (isset($data['googleaddcode'])) ? $data['googleaddcode'] : null;
     }
 
     // Add the following method:

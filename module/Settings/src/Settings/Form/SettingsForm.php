@@ -108,6 +108,17 @@ class SettingsForm extends Form {
                     'id' =>'upload_folder'
                 ),
         ));
+        
+        $this->add(array(
+             'name' => 'googleaddcode',
+             'type' => 'Textarea',
+             'attributes' => array(
+                    'class' => 'form-control',
+                    'placeholder' => 'Google Adds Code',
+                    'id' =>'googleaddcode'
+                ),
+        ));
+        
         $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
