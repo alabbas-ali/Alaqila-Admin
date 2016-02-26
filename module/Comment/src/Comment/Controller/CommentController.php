@@ -218,14 +218,14 @@ class CommentController extends AbstractActionController {
         
         $commentsCount = $this->getEntityManager()->createQueryBuilder()->select('count(q)')
             ->from('Comment\Model\Comment', 'q')
-            ->where ('q.type = :type AND q.type_id = :type_id')
+            ->where ('q.type = :type AND q.type_id = :type_id AND q.active = 1')
             ->setParameter('type' , $type)
             ->setParameter('type_id' , $id)
             ->orderBy('q.id' , 'DESC');
         
         $qb = $this->getEntityManager()->createQueryBuilder()->select('q')
             ->from('Comment\Model\Comment', 'q')
-            ->where ('q.type = :type AND q.type_id = :type_id')
+            ->where ('q.type = :type AND q.type_id = :type_id AND q.active = 1')
             ->setParameter('type' , $type)
             ->setParameter('type_id' , $id)
             ->orderBy('q.id' , 'DESC')
