@@ -23,6 +23,8 @@ return array(
         'Visit',
         'Advertisement',
         'Programs',
+        'Secnews',
+        'Sections',
         'Imagesuploads',
         'Settings',
         'Myuploads',
