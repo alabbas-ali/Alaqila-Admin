@@ -345,12 +345,12 @@ class SecnewsController extends AbstractActionController {
                 $this->getEntityManager()->persist($secnews);
                 $this->getEntityManager()->flush();
                 $id=$secnews->getId();
-                $notification = new Notification();
+                /*$notification = new Notification();
                 $message='قام '.$data['user']->displayName.' بإضافة خبر جديد';
                 $notData=array('type'=>'secnews','type_id'=>$id,'user_type'=>'1','message'=>$message);
                 $notification->exchangeArray($notData);
                 $this->getEntityManager()->persist($notification);
-                $this->getEntityManager()->flush();
+                $this->getEntityManager()->flush();*/
                 
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('Secnews',array('id'=>$secid));
