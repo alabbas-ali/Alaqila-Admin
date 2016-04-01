@@ -42,7 +42,8 @@
 
     <?php echo $this->form()->closeTag() ?>
     <?php if ($this->enableRegistration) : ?>
-        <?php echo $this->translate('Not registered?'); ?> <a href="<?php echo $this->url('zfcuser/register') . ($this->redirect ? '?redirect=' . $this->escapeUrl($this->redirect) : '') ?>"><?php echo $this->translate('Sign up!'); ?></a>
+        <?php echo $this->translate('Not registered?'); ?> <!-- <a href="<?php echo $this->url('zfcuser/register') . ($this->redirect ? '?redirect=' . $this->escapeUrl($this->redirect) : '') ?>"><?php echo $this->translate('Sign up!'); ?></a> -->
+         <a href="http://alaqila.tv/signup/"><?php echo $this->translate('Sign up!'); ?></a> 
     <?php endif; ?>
 
 </div><!-- /.login-box-body -->

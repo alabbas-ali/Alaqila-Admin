@@ -297,14 +297,45 @@ class AudioController extends AbstractActionController {
                 $notification->exchangeArray($notData);
                 $this->getEntityManager()->persist($notification);
                 $this->getEntityManager()->flush();
-
+                $this->sendgsmNotficationMessage($audio);
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('Audio');
             }
         }
         return array('form' => $form);
     }
+    
+    function sendgsmNotficationMessage($data){
+        
+        $content = array("en" => $data->subtitle , "ar" => $data->subartitle);
+        $headings = array("en" => $data->title , "ar" => $data->artitle);
+        $dataContent = array( "id" => $data->getId(),"type" => "soundDetials");
+        
+        $fields = array(
+            'app_id' => "511620c8-50c4-4936-bdea-98567623d54f",
+            'included_segments' => array('All'),
+            'data' => $dataContent,
+            'contents' => $content,
+            'headings' => $headings,
+            'big_picture' => $data->image
+        );
 
+        $fieldss = json_encode($fields);
+        //print("\nJSON sent:\n");
+        //var_dump($fields); die();
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: Basic MmNmYWYwM2QtMWM5NC00YzdhLTk1NDAtNjg4MWM4M2Q3NjVk'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldss);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_exec($ch);
+        curl_close($ch);
+    }
+    
     public function editAction() {
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
