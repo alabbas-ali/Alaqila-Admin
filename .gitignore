@@ -10,6 +10,7 @@ node_modules/
 node/
 target/
 vendor/
+data/
 
 # IDEs and editors
 /.idea
